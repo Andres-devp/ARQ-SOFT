@@ -1,0 +1,230 @@
+
+<!-- ======================= ADD ======================= -->
+<section class="view" id="v-add" data-title="Diseño con ADD" data-group="Módulo 1 · Arquitectura" data-num="08"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 12 · Attribute-Driven Design 3.0</span><h1>Diseñar con ADD</h1><div class="src"><span class="chip src-prof">Clase 12</span><span class="chip src-libro">Bass cap. 20 · Cervantes y Kazman</span></div></div>
+
+<div class="block"><h2 id="d-que">Qué es y qué produce</h2>
+<div class="flow">
+<p><b>ADD es iterativo.</b> En cada iteración: seleccionar una parte del sistema a diseñar, mapear los requisitos arquitectónicamente significativos (RAS/ASR) de esa parte, y generar y probar un diseño para ella.</p>
+<p><b>No produce un diseño completo:</b> produce un conjunto de contenedores o componentes con responsabilidades, interacciones y flujo de información. <b>Entradas:</b> requisitos funcionales, de calidad y restricciones. <b>Salidas:</b> contenedores (responsabilidades, interacciones, flujo de información).</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Tallar una escultura: primero la silueta general (iteración 1), luego brazos y cabeza (funcionalidad primaria), luego los detalles que la hacen resistir (disponibilidad, rendimiento). Cada pasada tiene un objetivo.</span></div>
+</div></div>
+
+<div class="block"><h2 id="d-7">Los 7 pasos</h2>
+<figure class="dg" data-h="430" id="fig-add7"><div class="dg-stage"><div class="dg-inner" data-diagram="add7"></div></div><figcaption class="dg-cap"><span>ADD 3.0: siete pasos por iteración y el ciclo de iteraciones.</span></figcaption></figure>
+<div data-player="add7" data-target="fig-add7"></div>
+</div>
+
+<div class="block"><h2 id="d-in">Paso 1 en detalle: las entradas</h2>
+<div class="grid3">
+<div class="card"><h4>Propósito del diseño</h4><p class="small">¿Para qué diseñamos? Estimación temprana, prototipo para mitigar riesgo técnico, sistema nuevo en dominio maduro… El Taller 4: “sistema nuevo en un dominio maduro” (existe Sahana Eden).</p></div>
+<div class="card"><h4>Funcionalidad primaria</h4><p class="small">Los requisitos funcionales que más influyen en la estructura (RF-01 a RF-06, RF-09 a RF-11 en el Taller 4).</p></div>
+<div class="card"><h4>Escenarios de calidad</h4><p class="small">En formato de 6 partes y priorizados (QA-01 a QA-08).</p></div>
+<div class="card"><h4>Restricciones</h4><p class="small">Decisiones ya tomadas (RES-01 a RES-10).</p></div>
+<div class="card"><h4>Preocupaciones</h4><p class="small">Asuntos de diseño no expresados como requisitos: estructura general, comunicación entre módulos, trabajo en equipos (PA-01 a PA-06).</p></div>
+<div class="card"><h4>Priorización</h4><p class="small">Primero los drivers con <b>alta importancia para el cliente y alta dificultad técnica</b>: son los que más restringen y más cuesta cambiar tarde.</p></div>
+</div></div>
+
+<div class="block"><h2 id="d-4">Paso 4 en detalle: conceptos de diseño</h2>
+<div class="flow">
+<p>“Probablemente la decisión más difícil.” Identificar alternativas y elegir una. Los conceptos de diseño son: <b>arquitecturas de referencia</b>, <b>patrones de despliegue</b>, <b>patrones arquitectónicos</b>, <b>tácticas</b> y <b>componentes desarrollados externamente</b> (frameworks).</p>
+<div class="tbl-wrap"><table><thead><tr><th>Si buscas…</th><th>Principio de diseño (Clase 12)</th></tr></thead><tbody>
+<tr><td>Alta modificabilidad</td><td>Buena modularidad: alta cohesión, bajo acoplamiento</td></tr>
+<tr><td>Alta disponibilidad</td><td>Evitar un solo punto de falla</td></tr>
+<tr><td>Escalabilidad</td><td>Evitar límites codificados para recursos críticos</td></tr>
+<tr><td>Seguridad</td><td>Limitar los puntos de acceso a recursos críticos</td></tr>
+<tr><td>Capacidad de prueba</td><td>Externalizar el estado</td></tr>
+</tbody></table></div>
+<p><b>Paso 3, estrategias:</b> primero en amplitud por defecto; primero en profundidad si usas tecnología nueva (explorar sus implicaciones) o si un equipo necesita trabajo ya (generarle requisitos). Refinar = descomponer (top-down), combinar (bottom-up) o mejorar elementos previos.</p>
+<p><b>Paso 5:</b> si elegiste capas, decide cuántas; asigna responsabilidades (presentación: interacción del usuario; datos: persistencia); define interfaces (especificación contractual de cómo fluye la información).</p>
+<p><b>Paso 6:</b> documenta decisiones y analiza la coherencia entre vistas. Son <b>bocetos</b> (“sketch”): se refinan en iteraciones siguientes. <b>Paso 7:</b> revisar bocetos y decisiones frente al propósito; buscar inconsistencias y fallas, individual o en grupo.</p>
+</div></div>
+
+<div class="block"><h2 id="d-fcaps">El ejemplo de la clase: sistema FCAPS</h2>
+<div class="flow">
+<p>Una empresa de telecomunicaciones quiere ampliar su red IP para VoIP de alta calidad; la sincronización de los servidores es crítica. Despliega una red de servidores de tiempo NTP organizados por estratos (el estrato 1 tiene hardware de tiempo preciso: oscilador de cesio, GPS). Plan inicial: 100 servidores de un modelo que además soporta SNMP (set, get, trap). Hace falta un sistema de gestión conforme al modelo <b>FCAPS</b>: Fault, Configuration, Accounting, Performance, Security. Fault management = reconocer, aislar, corregir y registrar fallas (traps o pérdida de comunicación).</p>
+<ul>
+<li><b>Iteración 1:</b> refina el sistema completo; elige la arquitectura de referencia <b>Rich Internet Application</b> (del catálogo: web app, RIA, móvil, de servicios) y produce un diagrama de despliegue inicial.</li>
+<li><b>Iteración 2:</b> identifica estructuras para la funcionalidad primaria (UC-1, UC-2, UC-7) y atiende CRN-3 (asignar trabajo al equipo), refinando módulos de las capas con patrones de <i>Pattern-Oriented Software Architecture vol. 4</i>.</li>
+<li><b>Iteración 3:</b> atiende el escenario de calidad QA-3, y así sucesivamente.</li>
+</ul>
+<p class="small muted">Las tablas de casos de uso y escenarios del FCAPS son imágenes en las diapositivas; aquí solo va lo que el texto dice. Cuidado: en el FCAPS “QA-3” y “UC-1” son IDs del libro de Cervantes y Kazman, no del Taller 4.</p>
+</div></div>
+
+<div class="block"><h2>Cómo aparece en el examen</h2>
+<div class="flow"><p>Si te piden “aplica ADD”, muestra al menos dos iteraciones con los 7 pasos nombrados, y en cada una: objetivo, drivers (con IDs), elemento refinado, concepto elegido con alternativa descartada, elementos con responsabilidades, boceto de vista y un análisis que diga qué quedó abordado, parcial o pendiente.</p></div>
+<details class="sol"><summary>¿Por qué el Taller 4 pone la disponibilidad antes que la escalabilidad?</summary><div><p>Por dependencia técnica: “los mecanismos de replicación son la base del escalado horizontal”. Y la seguridad/trazabilidad va al final porque es transversal y se aplica mejor cuando ya se conocen las operaciones críticas.</p></div></details>
+</div>
+</div></section>
+
+<!-- ======================= TALLER 4 ======================= -->
+<section class="view" id="v-taller4" data-title="Taller 4 resuelto" data-group="Módulo 1 · Arquitectura" data-num="09"><div class="page">
+<div class="sec-head"><span class="eyebrow">Parrado · Jiménez · Doncel · Angulo</span><h1>Taller 4: Gestión de Desastres con ADD</h1><div class="src"><span class="chip src-taller">Taller 4 (PDF del grupo)</span><span class="chip src-prof">enunciado (foto)</span></div></div>
+
+<div class="block"><h2 id="t-enun">El enunciado</h2>
+<figure class="dg" data-h="420" id="fig-enun"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:taller4.jpg}}" alt="Foto del enunciado manuscrito del Taller 4" width="1000" height="739"></div></div><figcaption class="dg-cap"><span>Diseñar una AS con ADD (mínimo 5 iteraciones) para el módulo de Gestión de Desastres: ingresar información, consumir o recibir información de otros sistemas, mostrar zonas de incidencia y afectados; N (&gt;1000) usuarios concurrentes; disponible en todo momento; entregar las iteraciones con vista lógica y de procesos.</span></figcaption></figure>
+<div class="note" style="margin-top:10px"><b>Qué entrega y qué no.</b> El documento entrega vista lógica y de procesos en cada iteración. Deja para después la vista de despliegue, la selección de tecnologías y la evaluación ATAM (restricción de diseño agnóstico, RES-08).</div>
+</div>
+
+<div class="block"><h2 id="t-in">Entradas del diseño</h2>
+<h3>Requisitos funcionales</h3><div data-table="rf" style="margin-top:8px"></div>
+<h3 style="margin-top:18px">Escenarios de calidad (formato de 6 partes de Bass)</h3><div data-table="qa" style="margin-top:8px"></div>
+<h3 style="margin-top:18px">Restricciones y preocupaciones</h3><div data-table="respa" style="margin-top:8px"></div>
+</div>
+
+<div class="block"><h2 id="t-plan">Plan de iteraciones</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Iter.</th><th>Objetivo</th><th>Drivers</th><th>Elemento refinado</th></tr></thead><tbody>
+<tr><td>1</td><td>Estructura general del sistema</td><td>QA-05, QA-08, PA-01, PA-02, PA-06</td><td>Sistema completo</td></tr>
+<tr><td>2</td><td>Requisitos funcionales primarios</td><td>RF-01 a RF-06, RF-09, RF-11, PA-03, PA-04</td><td>Servicio de Gestión de Desastres</td></tr>
+<tr><td>3</td><td>Disponibilidad y resiliencia</td><td>QA-01, QA-06, RES-03, RES-06</td><td>Servicio y adaptadores</td></tr>
+<tr><td>4</td><td>Escalabilidad y rendimiento</td><td>QA-02, QA-03, RES-04, RES-05</td><td>Caminos de escritura, lectura e ingesta</td></tr>
+<tr><td>5</td><td>Modificabilidad, interoperabilidad, seguridad, trazabilidad</td><td>QA-04, QA-05, QA-07, RES-09, RES-10</td><td>Catálogos, adaptadores, servicios transversales</td></tr>
+</tbody></table></div>
+<p class="small muted" style="margin-top:6px">El texto dice “RF-01 a RF-06”: esos son RF-01, RF-02, RF-03, RF-04, RF-05 y RF-06.</p>
+</div>
+
+<div class="block"><h2 id="t-it">Las 5 iteraciones</h2>
+<div data-tabs>
+<div class="tabs"><button>1 · Estructura</button><button>2 · Funcionalidad</button><button>3 · Disponibilidad</button><button>4 · Escalabilidad</button><button>5 · Modificabilidad</button></div>
+<div class="tabpanel"><div class="flow">
+<p><b>Objetivo:</b> estilo base, descomposición en módulos de dominio, mecanismo de comunicación y frontera con sistemas externos. <b>Drivers determinantes:</b> integrar sistemas heterogéneos sin reemplazarlos (QA-05, RES-01, RES-02), incorporar módulos sin tocar los existentes (QA-08), tolerar la caída externa (RES-03), coexistencia síncrono/asíncrono (RES-05).</p>
+<p><b>Conceptos evaluados</b> con la tabla de Richards: capas (descartado: escala todo junto y un fallo de integración compromete lo crítico), space-based (complejidad no justificada para 10.000 usuarios), microkernel (insuficiente en escalabilidad y tolerancia; su idea vuelve en la iteración 5). <b>Decisión:</b> microservicios por dominio + pub/sub.</p>
+<p><b>Tácticas:</b> intermediarios (adaptadores), abstraer servicios comunes (modelo canónico), adherir a estándares, restringir rutas de comunicación (gateway y bus), encapsular.</p>
+<p><b>Decisiones:</b> DA-01, DA-02, DA-03, DA-04, DA-05. <b>Riesgos:</b> R1, R2, R3.</p>
+<p><b>Análisis:</b> QA-08 abordado; QA-05 parcial (falta registro dinámico y modelo canónico detallado, y la lista de chequeo de integrabilidad muestra que faltan tácticas de adaptación); QA-01, QA-02, QA-03 y QA-06 pendientes.</p>
+</div>
+<figure class="dg" data-h="560" id="fig-t4l2" style="margin-top:10px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4logica"></div></div><figcaption class="dg-cap"><span>Figura 1 reconstruida: vista lógica general.</span></figcaption></figure>
+<figure class="dg" data-h="640" id="fig-escA2" style="margin-top:10px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4escA"></div></div><figcaption class="dg-cap"><span>Figura 2 reconstruida: vista de procesos del escenario A.</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Objetivo:</b> descomponer el servicio de Gestión de Desastres para soportar los RF primarios; atender PA-03 y PA-04. <b>Conceptos:</b> capas internas, máquina de estados explícita, postergar la vinculación del catálogo, versionado temporal de zonas, separación comandos/consultas con proyección, outbox transaccional.</p>
+<p><b>Contratos (agnósticos):</b> comandos RegistrarDesastre, ActualizarClasificacion, CambiarEstado, ActualizarZona; consultas ConsultarSituacion, ConsultarHistorial; evento consumido ReporteExternoRecibido; eventos publicados DesastreRegistrado, DesastreReclasificado, EstadoDesastreCambiado, ZonaAfectadaActualizada, DesastreCerrado (con ID, versión, valores anterior y nuevo, autor, marca de tiempo).</p>
+<p><b>Decisiones:</b> DA-06 a DA-10. <b>Riesgos:</b> R4 (gestor de ciclo de vida sobrecargado), R5 (fusión errónea). El recorrido de “la zona crece de 3 a 7 barrios” funciona de extremo a extremo.</p>
+</div>
+<figure class="dg" data-h="520" id="fig-t4i" style="margin-top:10px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4interna"></div></div><figcaption class="dg-cap"><span>Figura 3 reconstruida: capas internas del módulo. El Gestor de ciclo de vida es el único que modifica el estado.</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Objetivo:</b> detectar fallos, recuperarse y evitar su propagación; el escenario C es el caso de prueba. Elementos refinados: el servicio, el adaptador externo y el camino de publicación (se obtienen recorriendo el escenario C hacia atrás).</p>
+<div class="tbl-wrap"><table><thead><tr><th>Táctica o patrón</th><th>Grupo</th><th>Instanciación</th></tr></thead><tbody>
+<tr><td>Monitor y latido</td><td>Detección</td><td>Sin latido durante dos intervalos → retirar la instancia del balanceo</td></tr>
+<tr><td>Tiempo límite</td><td>Detección</td><td>800 ms en toda invocación externa</td></tr>
+<tr><td>Redundancia activa</td><td>Recuperación</td><td>N instancias sin estado tras balanceador con descubrimiento</td></tr>
+<tr><td>Reintento acotado</td><td>Recuperación</td><td>Retroceso exponencial, solo operaciones idempotentes</td></tr>
+<tr><td>Cortacircuitos</td><td>Recuperación</td><td>Corta reintentos si el externo está caído</td></tr>
+<tr><td>Degradación controlada</td><td>Recuperación</td><td>Último valor conocido marcado con antigüedad</td></tr>
+<tr><td>Transacciones</td><td>Prevención</td><td>Estado + bitácora + outbox atómicos</td></tr>
+<tr><td>Resincronización de estado</td><td>Reintroducción</td><td>Cola de reconciliación en orden</td></tr>
+<tr><td>Sonda semiabierta</td><td>Reintroducción</td><td>Una solicitud de prueba antes de restablecer</td></tr>
+<tr><td>Réplica en otra zona</td><td>Recuperación</td><td>Replicación sincrónica (RPO 1 min)</td></tr>
+</tbody></table></div>
+<p><b>Clasificación de funciones:</b> críticas (registro, cambio de estado/clasificación, consulta de estado, alertas) siempre disponibles; importantes (consulta consolidada, zonas, organismos) desde proyección o caché con antigüedad; diferibles (informes, exportaciones, reconciliaciones) se encolan o rechazan en el pico.</p>
+<p><b>Decisiones:</b> DA-11 a DA-15. <b>Análisis:</b> QA-06 abordado; QA-01 abordado con salvedad (el 99,95 % depende de MTBF/MTTR de infraestructura, que no existen en un diseño agnóstico). R1 mitigado con réplicas del gateway y del bus.</p>
+</div>
+<figure class="dg" data-h="640" id="fig-escC" style="margin-top:10px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4escC"></div></div><figcaption class="dg-cap"><span>Figura 6 reconstruida: escenario C, degradación y reingreso.</span></figcaption></figure>
+<div data-player="escC" data-target="fig-escC"></div>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Objetivo:</b> escalar de forma independiente lo saturado y cumplir latencias en el pico (escenarios B y D). <b>Tácticas:</b> controlar la demanda (limitar tasa por canal y organización, priorizar críticas) y gestionar recursos (escalado horizontal por servicio, proyección replicada, caché, colas acotadas con contrapresión, planificar trabajadores por longitud de cola).</p>
+<div class="tbl-wrap"><table><thead><tr><th>Camino</th><th>Componentes</th><th>Métrica de escalado</th><th class="num">Rango</th></tr></thead><tbody>
+<tr><td>Escritura</td><td>Instancias de comando y almacén transaccional</td><td>Latencia p95 de comandos</td><td class="num">2–12</td></tr>
+<tr><td>Lectura</td><td>Consulta, caché, réplicas de proyección</td><td>p95 y tasa de aciertos de caché</td><td class="num">3–30</td></tr>
+<tr><td>Ingesta</td><td>Cola y trabajadores</td><td>Longitud de cola y antigüedad del mensaje más viejo</td><td class="num">2–20</td></tr>
+</tbody></table></div>
+<p><b>Decisiones:</b> DA-16 a DA-20. <b>Riesgos nuevos:</b> R8 (el autoescalado tarda minutos) y R9 (el almacén de escritura no escala tan fácil).</p>
+</div>
+<figure class="dg" data-h="470" id="fig-caminos2" style="margin-top:10px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4caminos"></div></div><figcaption class="dg-cap"><span>Figura 7 reconstruida: separación de caminos.</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Objetivo:</b> que los cambios previsibles del dominio se resuelvan por configuración. Elementos: gestor de catálogos (lo que cambia seguido), capa de integración (lo que cambia por causas externas), identidad y auditoría (lo que debe aplicarse uniforme).</p>
+<p><b>Tácticas:</b> postergar la vinculación; encapsular y restringir dependencias; microkernel aplicado a los datos (modificabilidad) · abstraer servicios comunes, descubrir, configurar comportamiento (interoperabilidad) · autenticar y autorizar, limitar acceso y exposición, cifrar (seguridad) · auditar (trazabilidad).</p>
+<p><b>Auditoría obligatoria</b> (enunciado): asignación de recursos, presupuestos, proyectos, información de afectados, niveles de emergencia; se agregan cambios de estado y de delimitación.</p>
+<p><b>Decisiones:</b> DA-21 a DA-25. <b>Análisis:</b> QA-04 recorrido sin desplegar código; QA-05 pasa a abordado; QA-07 abordado en mecanismos (“que existan los mecanismos no equivale a que el sistema sea seguro”). Riesgos R10, R11.</p>
+</div></div>
+</div></div>
+
+<div class="block"><h2 id="t-da">Todas las decisiones</h2>
+<p class="muted small">Cada decisión documenta el problema, las alternativas descartadas con su razón, el razonamiento y la concesión aceptada. Filtra por iteración.</p>
+<div data-table="da"></div>
+</div>
+
+<div class="block"><h2 id="t-proc">Vista de procesos consolidada</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Unidad de concurrencia</th><th>Multiplicidad</th><th>Comunicación y sincronización</th></tr></thead><tbody>
+<tr><td>Gateway (E/S no bloqueante)</td><td>2–8 instancias</td><td>Síncrona con servicios; sin estado</td></tr>
+<tr><td>GD-Comando (pool de hilos)</td><td>2–12</td><td>Síncrona entrante, escritura transaccional; bloqueo sobre el agregado del evento</td></tr>
+<tr><td>GD-Consulta (pool de hilos)</td><td>3–30</td><td>Síncrona entrante, solo lectura</td></tr>
+<tr><td>Consumidor de ingesta</td><td>2–20 trabajadores</td><td>Asíncrona por tópico; partición por ID preserva el orden</td></tr>
+<tr><td>Despachador outbox</td><td>1 por instancia</td><td>Lectura transaccional y publicación al menos una vez</td></tr>
+<tr><td>Proyector de lectura</td><td>1 por partición</td><td>Asíncrona por tópico</td></tr>
+<tr><td>Reconciliador</td><td>1–4</td><td>Asíncrona por cola, ordenada e idempotente</td></tr>
+<tr><td>Notificador</td><td>2–10</td><td>Asíncrona por tópico, pool dedicado para alertas críticas</td></tr>
+</tbody></table></div>
+<div class="flow" style="margin-top:10px"><p><b>Consistencia deliberadamente asimétrica:</b> dentro de un evento el estado es fuertemente consistente (escrituras transaccionales sobre un agregado); entre módulos y hacia la proyección es eventual (segundos). La coordinación tolera una vista situacional de segundos de antigüedad, pero no que dos organismos registren estados contradictorios del mismo evento.</p></div>
+</div>
+
+<div class="block"><h2 id="t-an">Análisis frente a los escenarios y riesgos</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Escenario</th><th>Mecanismos</th><th>Riesgo residual</th></tr></thead><tbody>
+<tr><td>QA-01</td><td>Redundancia activa, monitor de salud, réplica en otra zona, outbox, transacciones</td><td>El 99,95 % requiere modelo de disponibilidad con datos de infraestructura</td></tr>
+<tr><td>QA-02</td><td>Separación de caminos, autoescalado por métrica propia, colas acotadas, limitación de tasa</td><td>R8, R9</td></tr>
+<tr><td>QA-03</td><td>Proyección, caché, priorización, publicación diferida</td><td>Requiere verificación experimental</td></tr>
+<tr><td>QA-04</td><td>Catálogo declarativo versionado, validador, recarga en ejecución</td><td>R10</td></tr>
+<tr><td>QA-05</td><td>Adaptadores, modelo canónico, registro dinámico, estándares</td><td>R11</td></tr>
+<tr><td>QA-06</td><td>Timeout, reintento acotado, cortacircuitos, degradación, reconciliación</td><td>R6, R7</td></tr>
+<tr><td>QA-07</td><td>Autenticación federada, autorización por rol y organización, cifrado, bitácora inmutable</td><td>Complejidad de permisos multiorganización</td></tr>
+<tr><td>QA-08</td><td>Pub/sub, encapsulamiento, dependencias dirigidas</td><td>R2</td></tr>
+</tbody></table></div>
+<h3 style="margin-top:18px">Registro de riesgos (entrada prevista para ATAM)</h3>
+<div data-table="riesgos" style="margin-top:8px"></div>
+<div class="note flag" style="margin-top:12px"><b>Detalles internos a revisar en el documento.</b> La introducción dice que “la sección 11 detalla el trabajo pendiente” pero el trabajo pendiente está en la sección 10; y que “la vista de procesos se consolida en la sección 9”, cuando está en la sección 8 (la 9 es el análisis). Además, algunas figuras son imágenes que no se pudieron extraer: aquí están reconstruidas desde el texto.</div>
+</div>
+
+<div class="block"><h2>Úsalo para practicar</h2>
+<details class="sol"><summary>Si el enunciado cambiara a “los sistemas externos nunca se caen pero los tipos de desastre cambian cada semana”, ¿qué decisiones pierden peso y cuáles ganan?</summary><div><p>Pierden peso DA-12, DA-13 y DA-14 (resiliencia frente a externos). Gana peso todo lo de la iteración 5 (DA-07, DA-21: postergar la vinculación y validador), y quizá conviene adelantar esa iteración. La disponibilidad propia (DA-11, DA-15) sigue igual porque QA-01 no cambió.</p></div></details>
+<details class="sol"><summary>Identifica un punto de sensibilidad y un punto de trade-off en el Taller 4.</summary><div><p><b>Sensibilidad:</b> el umbral del cortacircuitos (3 fallos o 50 % en 30 s) afecta marcadamente la resiliencia (R6: mal calibrado se abre ante picos normales). <b>Trade-off:</b> la réplica sincrónica (DA-15) mejora el RPO (disponibilidad/durabilidad) pero empeora la latencia de escritura (desempeño).</p></div></details>
+</div>
+</div></section>
+
+<!-- ======================= ATAM ======================= -->
+<section class="view" id="v-atam" data-title="Evaluación con ATAM" data-group="Módulo 1 · Arquitectura" data-num="10"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 14 · Architecture Tradeoff Analysis Method</span><h1>Evaluar la arquitectura con ATAM</h1><div class="src"><span class="chip src-libro">Bass cap. 21 (y cap. 19.4)</span><span class="chip src-prof">Clase 14 sin diapositivas en el proyecto</span></div></div>
+<div class="note warn"><b>Fuente.</b> La Clase 14 cita <i>Evaluating Software Architectures: Methods and Case Studies</i> (Clements, Kazman, Klein). Ese libro no está en el proyecto; esta sección usa Bass cap. 21, que resume el mismo método.</div>
+
+<div class="block"><h2 id="m-que">Qué es</h2>
+<div class="flow">
+<p>ATAM evalúa una arquitectura (incluso antes de construir el sistema) contra sus atributos de calidad. Los evaluadores no necesitan conocerla previamente. Se usa desde hace más de dos décadas en sistemas grandes (automotriz, financiero, defensa).</p>
+<div class="grid3">
+<div class="card"><h4>Equipo evaluador</h4><p class="small">Externo al proyecto, 3–5 personas. Roles: líder de equipo, líder de evaluación, escriba de escenarios, e-escriba, interrogador.</p></div>
+<div class="card"><h4>Decisores del proyecto</h4><p class="small">Gerente, representante del cliente y siempre el arquitecto (regla: el arquitecto debe participar de buena gana).</p></div>
+<div class="card"><h4>Stakeholders</h4><p class="small">Desarrolladores, testers, integradores, mantenedores, usuarios… (10–25 en un sistema grande). No participan en todo.</p></div>
+</div>
+</div></div>
+
+<div class="block"><h2 id="m-fases">Fases y pasos</h2>
+<figure class="dg" data-h="430" id="fig-atam"><div class="dg-stage"><div class="dg-inner" data-diagram="atam"></div></div><figcaption class="dg-cap"><span>4 fases; los 9 pasos ocurren en las fases 1 y 2.</span></figcaption></figure>
+<div data-player="atam" data-target="fig-atam"></div>
+</div>
+
+<div class="block"><h2 id="m-out">Salidas y vocabulario</h2>
+<div class="grid2">
+<div class="card"><h4>Riesgo</h4><p class="small">Decisión arquitectónica que puede llevar a consecuencias indeseables respecto a los requisitos de calidad. <b>Es la salida principal</b>: base del plan de mitigación.</p></div>
+<div class="card"><h4>No-riesgo</h4><p class="small">Decisión que, tras el análisis, se considera segura.</p></div>
+<div class="card"><h4>Punto de sensibilidad</h4><p class="small">Decisión con efecto marcado sobre la respuesta de un atributo.</p></div>
+<div class="card"><h4>Punto de trade-off</h4><p class="small">Dos o más respuestas de calidad son sensibles a la misma decisión, una mejora y la otra empeora.</p></div>
+<div class="card"><h4>Tema de riesgo</h4><p class="small">Agrupación de riesgos por causa común (p. ej., “poca atención a la disponibilidad”), relacionada con los objetivos de negocio que amenaza.</p></div>
+<div class="card"><h4>Otras salidas</h4><p class="small">Presentación concisa (≤ 1 hora), objetivos de negocio articulados, escenarios priorizados, mapeo decisiones ↔ requisitos. Intangibles: sentido de comunidad y comunicación.</p></div>
+</div>
+<div class="note no-id" style="margin-top:12px"><b>Ejemplo de Bass (fig. 21.1).</b> Escenario A12: falla una CPU del switch; respuesta 0,999999 de disponibilidad. Decisiones: CPU de respaldo (sensibilidad S2, riesgo R8), sin canal de datos de respaldo (S3, trade-off T3, riesgo R9), watchdog (no-riesgo N12), heartbeat (N13), enrutamiento de conmutación (N14). La frecuencia del heartbeat es un <b>punto de sensibilidad</b> (define el tiempo de detección) y de <b>trade-off</b> (más frecuencia = más disponibilidad pero más CPU y red). <i>Estos R8/R9 son del libro, no del Taller 4.</i></div>
+</div>
+
+<div class="block"><h2 id="m-util">Árbol de utilidad</h2>
+<div class="flow"><p>Raíz “Utilidad” → atributos → refinamientos → escenarios (hojas). Cada hoja lleva (importancia de negocio, riesgo técnico) en H/M/L: los decisores califican lo primero y el arquitecto lo segundo. <b>H de negocio</b> = imprescindible; <b>H de riesgo</b> = “no te deja dormir”. Se analiza primero lo (H,H). Bass también lo propone como herramienta para capturar ASR cuando no tienes acceso directo a los stakeholders (cap. 19.4).</p></div>
+<figure class="dg" data-h="480" id="fig-ut"><div class="dg-stage"><div class="dg-inner" data-diagram="utiltree"></div></div><figcaption class="dg-cap"><span>Extracto del árbol de utilidad de un sistema de salud (Bass, tabla 19.1).</span></figcaption></figure>
+<h3 style="margin-top:16px">Construye el árbol de Gestión de Desastres</h3>
+<p class="muted small">Precargado con los escenarios del Taller 4 y prioridades de ejemplo (no están en el taller). Cambia prioridades o agrega escenarios.</p>
+<div class="card" id="simUtil" style="margin-top:8px"></div>
+</div>
+
+<div class="block"><h2>Cómo aparece en el examen</h2>
+<div class="flow"><p>Preguntas típicas: ordenar los pasos, distinguir sensibilidad de trade-off, identificar riesgos en una arquitectura dada, o construir un árbol de utilidad para un caso. Truco: para cada táctica que propongas, pregúntate “¿qué parámetro de esta decisión cambia la respuesta?” (sensibilidad) y “¿qué otro atributo empeora?” (trade-off).</p></div>
+<details class="sol"><summary>En el caso del Taller 4, ¿es la caché situacional (DA-18) un punto de trade-off?</summary><div><p>Sí: el tiempo de vida (TTL) de la caché es una decisión a la que son sensibles el <b>desempeño</b> (TTL largo = más aciertos, menos carga) y la <b>frescura/consistencia</b> del dato (TTL largo = datos más viejos, lo que en una emergencia afecta decisiones, R7). El taller lo mitiga con invalidación por evento.</p></div></details>
+</div>
+</div></section>

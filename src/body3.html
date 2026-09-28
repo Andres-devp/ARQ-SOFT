@@ -1,0 +1,251 @@
+
+<!-- ======================= ESTILOS ======================= -->
+<section class="view" id="v-estilos" data-title="Estilos y patrones" data-group="Módulo 1 · Arquitectura" data-num="06"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 9 · Richards (2022) · Taller 3</span><h1>Estilos y patrones arquitectónicos</h1><div class="src"><span class="chip src-prof">Clase 9</span><span class="chip src-libro">Richards caps. 1–7, apéndice A</span><span class="chip src-taller">Taller 3 (docx + matriz)</span></div></div>
+
+<div class="block"><h2 id="s-term">Estilo, patrón y patrón de diseño</h2>
+<div class="flow">
+<p>Richards (2.ª ed.) cambió “architecture pattern” por <b>architecture style</b> para evitar confusiones:</p>
+<ul>
+<li><b>Estilo</b>: la macro-estructura del sistema (capas, microkernel, eventos, microservicios, basado en espacio).</li>
+<li><b>Patrón arquitectónico</b>: bloque estructural reutilizable que se usa <i>dentro</i> de cualquier estilo para resolver un problema (CQRS, cortacircuitos, outbox).</li>
+<li><b>Patrón de diseño</b>: cómo se escribe el código (Builder). Se puede usar Builder para implementar CQRS, y CQRS dentro de microservicios.</li>
+</ul>
+<p>Los estilos se <b>combinan</b>: microservicios dirigidos por eventos, microservicios basados en espacio, microkernel dirigido por eventos. El Taller 4 combina microservicios + publicación-suscripción + capas internas + microkernel aplicado a los datos.</p>
+<div class="note flag"><b>Diferencia entre fuentes.</b> La Clase 9 y el Taller 3 usan otra taxonomía: “estilo” = categoría amplia (llamada y retorno, basado en servicios, basado en eventos…) y “patrón” = variante concreta (capas, microservicios, pub/sub). Así, en el Taller 3 “microservicios” es un <i>patrón</i> del estilo “basado en servicios”, mientras que para Richards es un <i>estilo</i>. En el examen, usa la terminología del profesor y, si puedes, menciona la otra.</div>
+</div></div>
+
+<div class="block"><h2 id="s-clas">Dos clasificaciones de Richards</h2>
+<figure class="dg" data-h="270" id="fig-md"><div class="dg-stage"><div class="dg-inner" data-diagram="monodist"></div></div><figcaption class="dg-cap"><span>Monolítico (una unidad de despliegue) vs. distribuido (varias unidades).</span></figcaption></figure>
+<div class="grid2" style="margin-top:12px">
+<div class="card"><h4>Monolítico</h4><p class="small">Simple, barato, rápido de construir. Débil en escalabilidad, tolerancia a fallos y elasticidad: un error fatal (sin memoria) tumba todo; MTTR y tiempo de arranque en minutos; escala entero. <b>Ejemplos:</b> capas, monolito modular, pipeline, microkernel.</p></div>
+<div class="card"><h4>Distribuido</h4><p class="small">“Superpoderes” operativos: escalabilidad y elasticidad por servicio, tolerancia a fallos, MTTR en segundos, agilidad. Sufre las 8 <b>falacias de la computación distribuida</b>, transacciones distribuidas, consistencia eventual, contratos, y cuesta más. <b>Ejemplos:</b> eventos, microservicios, basado en servicios, SOA, basado en espacio.</p></div>
+</div>
+<p class="flow" style="margin-top:10px"><span><b>¿Cuál elegir?</b> Pregunta si el sistema tiene <b>conjuntos distintos de características</b>: si solo una parte necesita escalar y estar siempre disponible (y otra, administrativa, no), eso pide distribuido. Sistemas simples → monolítico.</span></p>
+<figure class="dg" data-h="330" id="fig-part" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="st_part"></div></div><figcaption class="dg-cap"><span>Partición técnica vs. por dominio. La elección debe alinearse con la estructura de equipos (ley de Conway) y con el tipo de cambios esperados.</span></figcaption></figure>
+</div>
+
+<div class="block"><h2 id="s-c9">La clasificación de la Clase 9</h2>
+<div class="flow"><p>La Clase 9 propone categorías (basadas en Sharma et al. 2015 y ByteByteGo): flujo de datos, centrado en datos, llamada y retorno, orientado a objetos, microkernel, basado en eventos, basado en servicios, basado en la nube y distribuido/descentralizado.</p></div>
+<div data-tabs>
+<div class="tabs"><button>Llamada y retorno</button><button>Flujo de datos</button><button>Componentes independientes</button><button>Eventos</button><button>Centrado en datos</button></div>
+<div class="tabpanel"><div class="flow">
+<p><b>Persigue escalabilidad y modificabilidad</b>; ha dominado en grandes sistemas. Tres variantes:</p>
+<ul>
+<li><b>Programa principal y subrutinas</b>: descomposición jerárquica, un solo hilo de control, razonamiento jerárquico; modificación en cascada (cambiar una subrutina obliga a cambiar las invocadas).</li>
+<li><b>Orientado a objetos</b>: componentes = objetos o TADs que interactúan por invocación; se puede cambiar la implementación sin afectar a los clientes; persigue modificabilidad.</li>
+<li><b>Capas</b>: organización jerárquica; cada capa da servicios a la de arriba; conectores definidos por protocolos; restricción: solo llamadas de niveles superiores a inferiores (variante: solo adyacentes). Aplicaciones: pilas de protocolos (OSI), sistemas operativos, compiladores. Propiedades: facilita la migración (el acoplamiento con el entorno queda en las capas bajas), sustituir implementaciones, trabajar en distintos niveles de abstracción.</li>
+</ul>
+<p class="small muted">La Clase 9 cita la Ley de Miller (7 ± 2 elementos en la memoria de trabajo) como argumento para limitar el número de capas.</p>
+</div>
+<figure class="dg" data-h="420" id="fig-capas"><div class="dg-stage"><div class="dg-inner" data-diagram="st_capas"></div></div><figcaption class="dg-cap"><span>Petición a través de capas cerradas (Richards fig. 3-4).</span></figcaption></figure>
+<div data-player="capas" data-target="fig-capas"></div>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Objetivo:</b> reutilización y modificabilidad. El sistema es una serie de transformaciones sobre datos de entrada.</p>
+<ul>
+<li><b>Tubos y filtros</b>: cada filtro lee flujos de entrada y produce flujos de salida; no comparte estado, no conoce a sus vecinos, no conserva estado entre invocaciones. Especializaciones: pipelines (secuencia lineal), bounded pipes (tamaño limitado), typed pipes (tipos definidos). Ejemplo: compilador.</li>
+<li><b>Procesamiento por lotes</b>: cada paso es un programa independiente que termina antes de que empiece el siguiente, en secuencia predefinida. Patrones mencionados: pipeline (Airflow), work queue, MapReduce (Spark), chunking (Spring Batch), batch-stream híbrido (Kafka), retry, checkpoint.</li>
+</ul></div>
+<figure class="dg" data-h="220" id="fig-pf"><div class="dg-stage"><div class="dg-inner" data-diagram="st_pf"></div></div><figcaption class="dg-cap"><span>Tubos y filtros: compilador.</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Componentes independientes</b>: objetos o procesos independientes que se comunican por mensajes, sin control directo entre ellos; la modificabilidad viene del desacoplamiento.</p>
+<p><b>Comunicación entre procesos</b>: multiprocesamiento clásico; objetivo, escalabilidad. Componentes: procesos independientes; conectores: paso de mensajes punto a punto, síncrono o asíncrono, RPC.</p>
+<p><b>Cliente/servidor</b> (subtipo): servidores stand-alone con servicios específicos, clientes que los llaman, red que los conecta. <b>Ventajas:</b> distribución de datos directa, uso efectivo de redes (hardware barato), fácil añadir o actualizar servidores. <b>Desventajas:</b> no comparte datos entre subsistemas (intercambio ineficiente), administración redundante en cada servidor, sin registro central de nombres y servicios.</p></div>
+<figure class="dg" data-h="340" id="fig-cs"><div class="dg-stage"><div class="dg-inner" data-diagram="st_cs"></div></div><figcaption class="dg-cap"><span>Ejemplo cliente-servidor de la Clase 9 (biblioteca multimedia).</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Basados en eventos</b> (Clase 9): los componentes exponen eventos; otros se registran a los que les interesan; un manejador invoca a los registrados cuando llega un evento (<b>invocación implícita</b>). El orden de invocación es no determinista.</p>
+<div class="grid2"><div class="card"><h4>Ventajas</h4><p class="small">Simplicidad; evolución (reemplazar suscriptores); modularidad; elimina el polling; gran reúso: cualquier componente entra registrándose a los eventos.</p></div><div class="card"><h4>Desventajas</h4><p class="small">Posible desborde; escalabilidad imprevisible; pobre comprensibilidad; sin garantía de que alguien responda; poca recuperación ante falla parcial; efecto en el desempeño.</p></div></div>
+<p>Dos modelos: <b>transmisión (broadcast)</b> —el evento va a todos; cada subsistema decide si le interesa; efectivo para integrar subsistemas en red— y <b>manejado por interrupciones</b> —tiempo real, un manejador por tipo de interrupción vía vector de interrupciones; rápido pero difícil de programar y validar. El modelo push se vincula con el patrón Observer.</p>
+<div class="note flag"><b>Posible error en la diapositiva.</b> La primera viñeta de la Clase 9 dice que en eventos “los componentes interactúan por medio de invocaciones <i>explícitas</i>”, pero la misma clase luego explica la <b>invocación implícita</b> como rasgo del estilo. Para el examen: el rasgo distintivo es la invocación implícita.</div>
+</div>
+<figure class="dg" data-h="360" id="fig-eda"><div class="dg-stage"><div class="dg-inner" data-diagram="st_eda"></div></div><figcaption class="dg-cap"><span>Ejemplo de Richards: pedido de un libro con eventos derivados.</span></figcaption></figure>
+<div data-player="eda" data-target="fig-eda"></div>
+</div>
+<div class="tabpanel"><div class="flow">
+<p><b>Centrados en datos</b>: enfatizan la integración de datos; sistemas basados en acceso y actualización de estructuras de almacenamiento. Subestilos: repositorios, bases de datos, hipertextos, pizarras.</p>
+<p><b>Repositorio</b>: una estructura central (estado actual) + componentes independientes que operan sobre ella. <b>Ventajas:</b> compartir grandes cantidades de datos; manejo centralizado de respaldo y seguridad. <b>Desventajas:</b> todos deben acordar el modelo de datos (compromiso inevitable), evolución difícil y costosa, sin políticas específicas, distribución eficiente difícil.</p>
+<p><b>Pizarra (blackboard)</b>: repositorio activo que notifica a los suscriptores cuando cambian los datos; escalable, nuevos clientes se agregan fácil.</p></div>
+<figure class="dg" data-h="340" id="fig-repo"><div class="dg-stage"><div class="dg-inner" data-diagram="st_repo"></div></div><figcaption class="dg-cap"><span>Sistema de procesamiento de lenguaje con repositorio (Clase 9).</span></figcaption></figure>
+</div>
+</div></div>
+
+<div class="block"><h2 id="s-rich">Los cinco estilos de Richards</h2>
+<div data-tabs>
+<div class="tabs"><button>Capas</button><button>Microkernel</button><button>Eventos</button><button>Microservicios</button><button>Basado en espacio</button></div>
+<div class="tabpanel"><div class="flow">
+<p>El más común: capas horizontales (presentación, negocio, persistencia, BD) con <b>separación de responsabilidades</b>. <b>Capas cerradas</b> dan <b>aislamiento</b>: cambiar el SQL no toca la UI; cambiar de Angular a React no toca el negocio. Una <b>capa abierta</b> (p. ej., servicios compartidos) se puede saltar. Documenta cuáles son abiertas y por qué.</p>
+<p><b>Cuándo sí:</b> presupuesto/tiempo ajustados, cambios aislados por capa técnica, equipos organizados por capa (Conway). <b>Cuándo no:</b> alta escalabilidad, elasticidad, tolerancia a fallos o desempeño (escala el 100 %, un crash tumba todo); cambios mayormente de dominio (tocan todas las capas); equipos multifuncionales por dominio. <b>Antipatrón:</b> sinkhole (regla 80-20).</p></div></div>
+<div class="tabpanel"><figure class="dg" data-h="360" id="fig-mk"><div class="dg-stage"><div class="dg-inner" data-diagram="st_micro"></div></div><figcaption class="dg-cap"><span>Núcleo + plug-ins + registro.</span></figcaption></figure><div class="flow" style="margin-top:10px">
+<p>Núcleo con funcionalidad mínima y plug-ins independientes (entre ellos se comunican lo mínimo). Registro de plug-ins con nombre, contrato y protocolo. Plug-ins como librerías (monolítico) o servicios remotos (distribuido). Ejemplos: Eclipse, navegadores, Jenkins, Jira, reglas de reclamos de seguros por jurisdicción.</p>
+<p><b>Cuándo sí:</b> productos con extensiones planeadas, múltiples configuraciones por cliente o entorno, presupuesto ajustado. <b>Cuándo no:</b> alta escalabilidad/elasticidad o tolerancia a fallos (todo pasa por el núcleo = cuello de botella); si la mayoría de cambios ocurren en el núcleo.</p>
+<p class="small muted">En el Taller 4 la idea de microkernel se retoma “aplicada a los datos” (iteración 5): el núcleo implementa el ciclo de vida genérico y cada tipo de desastre aporta una definición declarativa.</p></div></div>
+<div class="tabpanel"><div class="flow">
+<p>Procesadores de eventos muy desacoplados, asíncronos. Componentes: procesador de eventos (servicio), evento iniciador (de afuera, formato sustantivo-verbo: “Place Order”), evento derivado (verbo-sustantivo: “Order Placed”) y canal (cola o tópico). <b>Evento vs. mensaje:</b> el evento anuncia lo que pasó y el emisor es dueño del canal y del contrato; el mensaje es una orden a un destinatario conocido, dueño del canal.</p>
+<p><b>Cuándo sí:</b> alto desempeño, escalabilidad y tolerancia a fallos; el negocio “reacciona” a cosas que pasan; flujos no deterministas complejos (CEP). <b>Cuándo no:</b> procesamiento basado en peticiones/CRUD; el usuario debe esperar el resultado; se necesita consistencia alta; se requiere control del flujo y del orden; manejo de errores centralizado.</p>
+<div class="note flag"><b>Diferencia entre fuentes (la señala el propio Taller 4).</b> Richards califica con 5 estrellas el desempeño de EDA, mientras Bass advierte que pub/sub perjudica la latencia individual y el orden. Ambas son ciertas sobre nociones distintas: <b>throughput agregado</b> vs. <b>latencia de una petición</b>. Por eso el Taller 4 deja síncronas las operaciones con objetivo de latencia (DA-05).</div></div></div>
+<div class="tabpanel"><figure class="dg" data-h="380" id="fig-ms"><div class="dg-stage"><div class="dg-inner" data-diagram="st_ms"></div></div><figcaption class="dg-cap"><span>Topología básica de microservicios.</span></figcaption></figure><div class="flow" style="margin-top:10px">
+<p>Servicios de propósito único, desplegados por separado, detrás de un API gateway <b>sin lógica de negocio</b>. “Micro” se refiere a lo que hace, no al tamaño (un servicio de correos con 312 clases sigue siendo microservicio). <b>Bounded context</b>: solo el dueño toca sus tablas. Rasgos únicos: datos distribuidos, automatización operativa (contenedores, Kubernetes, DevOps), cambio organizacional (equipos multifuncionales por dominio).</p>
+<p><b>Partes difíciles:</b> granularidad, comunicación (síncrona/asíncrona; orquestación/coreografía), datos, transacciones distribuidas. <b>Cuándo sí:</b> funcionalidad separable en piezas independientes, agilidad, tolerancia a fallos y escalabilidad a nivel de función, extensibilidad (“drop-in”). <b>Cuándo no:</b> flujos con mucha orquestación, datos fuertemente acoplados (→ service-based), costo/tiempo ajustados, alto desempeño (latencia de red 30–300 ms, de seguridad y de datos).</p></div></div>
+<div class="tabpanel"><figure class="dg" data-h="420" id="fig-sb"><div class="dg-stage"><div class="dg-inner" data-diagram="st_space"></div></div><figcaption class="dg-cap"><span>Unidades de procesamiento + middleware virtualizado.</span></figcaption></figure><div class="flow" style="margin-top:10px">
+<p>La base de datos es el cuello de botella final (topología triangular). Space-based la saca del procesamiento transaccional: los datos viven en rejillas de memoria replicadas entre <b>processing units</b> y se sincronizan con la BD de forma asíncrona por <b>data pumps</b> y <b>data writers</b> (data readers para arranque en frío). Ejemplos: boletas de conciertos, subastas, redes sociales de alto volumen.</p>
+<p><b>Cuándo sí:</b> concurrencia y elasticidad muy altas, desempeño extremo. <b>Cuándo no:</b> grandes volúmenes de datos transaccionales (todo en memoria), presupuesto ajustado, consistencia alta (siempre eventual); baja agilidad y difícil de probar a escala.</p></div></div>
+</div>
+<h3 style="margin-top:18px">Resumen de características (Richards, apéndice A, según la tabla 4 del Taller 4)</h3>
+<div data-table="richards" style="margin-top:8px"></div>
+<p class="small muted" style="margin-top:6px">La figura A-1 de Richards es una imagen; estos valores son los que el Taller 4 transcribió para 5 estilos y 5 características.</p>
+</div>
+
+<div class="block"><h2 id="s-attr">Relación estilos–atributos (Clase 9)</h2>
+<div data-table="estiloattr"></div>
+<div class="note flag" style="margin-top:10px"><b>Inconsistencias en la diapositiva (⚠).</b> En “Llamada y retorno”, desempeño aparece como atributo asociado <i>y</i> en conflicto. En “Blackboard”, la lista de atributos en conflicto repite exactamente la de asociados. Son probables errores de la tabla original; no los memorices como regla.</div>
+</div>
+
+<div class="block"><h2 id="s-matriz">La matriz del Taller 3: cómo funciona</h2>
+<div class="flow">
+<p><b>Qué compara:</b> 34 patrones agrupados en 9 estilos contra 9 atributos. Cada atributo es el promedio de 2–3 <b>subcriterios</b> (p. ej., disponibilidad = tolerancia a fallos, recuperación, redundancia; desempeño = latencia, throughput, eficiencia de recursos; simplicidad y costo: 5 = menor costo).</p>
+<p><b>Escala:</b> 1 muy desfavorable (el estilo trabaja en contra), 2 desfavorable, 3 neutro (depende de la implementación), 4 favorable, 5 muy favorable (fortaleza característica). <b>Pesos:</b> todos = 1 en el taller (suma 9), y el puntaje global es Σ(peso × valor) / Σ pesos. La hoja “Pesos” sugiere cuándo subir cada uno (p. ej., disponibilidad si el sistema es 24/7; interoperabilidad si hay que integrarse con heredados).</p>
+<p><b>Supuestos:</b> los valores son juicios del grupo informados por la bibliografía, no mediciones; un mismo estilo puede calificar distinto según el nivel donde se aplique (DA-06). Con pesos iguales, “basado en eventos” y “basado en la nube” quedan primeros; con otros pesos el ranking cambia.</p>
+</div>
+<div class="card" id="simMatriz" style="margin-top:10px"></div>
+<details class="sol" style="margin-top:10px"><summary>Ejercicio nuevo (no está en el taller): sistema de votación electrónica para una universidad, 1 día al año, 30.000 votantes en 8 horas, auditoría obligatoria y presupuesto bajo. Pon pesos y decide.</summary><div>
+<p>Pesos razonables: seguridad 3, disponibilidad 2 (solo un día, pero crítico), escalabilidad 2 (pico corto), simplicidad y costo 3, modificabilidad 0–1. Un resultado honesto: la matriz empuja hacia estilos distribuidos, pero el costo y la seguridad (trazabilidad centralizada) favorecen un <b>cliente-servidor/N-tier con capas</b> replicado detrás de un balanceador para el día de la votación, más <b>event sourcing</b> o bitácora inmutable para auditoría. Alternativa descartada: microservicios (costo y complejidad operativa injustificados para un día al año). Trade-off aceptado: escalado vertical/replicación del monolito completo.</p></div></details>
+</div>
+
+<div class="block"><h2 id="s-cat">Catálogo de estilos y patrones (Taller 3)</h2>
+<div data-table="catalogo"></div>
+</div>
+
+<div class="block"><h2>Cómo aparece en el examen (formato del Taller 3)</h2>
+<div class="flow"><p>Para cada caso el Taller 3 pedía: <b>1)</b> estilo, <b>2)</b> patrón complementario, <b>3)</b> tres características del problema que justifican la elección, <b>4)</b> una alternativa descartada y por qué, <b>5)</b> una ventaja y un riesgo. Es un formato excelente para la parte de “decisiones” del parcial.</p></div>
+<details class="sol"><summary>Practica: plataforma de telemedicina para zonas rurales con conectividad intermitente, videollamadas, historia clínica compartida con hospitales existentes.</summary><div>
+<p><b>Estilo:</b> basado en servicios (SOA/microservicios según la escala). <b>Patrón:</b> API Gateway + adaptadores con modelo canónico hacia los hospitales; eventos para sincronizar lo capturado sin conexión.</p>
+<p><b>Características:</b> integración con sistemas heterogéneos existentes; operación desconectada que exige sincronización posterior; datos sensibles con control de acceso centralizado.</p>
+<p><b>Descartada:</b> P2P (sin autoridad central no hay control de acceso ni trazabilidad de historias clínicas). <b>Ventaja:</b> integración con contratos estables y un punto de control de seguridad. <b>Riesgo:</b> el gateway como punto único de fallo y la consistencia eventual de lo capturado offline.</p></div></details>
+</div>
+</div></section>
+
+<!-- ======================= VISTAS 4+1 ======================= -->
+<section class="view" id="v-vistas" data-title="Documentación y 4+1 ★" data-group="Módulo 1 · Arquitectura" data-num="07"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 10 · el énfasis del examen</span><h1>Documentar la arquitectura: el modelo 4+1</h1><div class="src"><span class="chip src-prof">Clase 10</span><span class="chip src-libro">Bass cap. 22</span><span class="chip src-taller">Taller 4</span></div></div>
+
+<div class="block"><h2 id="v-para">¿Para qué documentar?</h2>
+<div class="flow">
+<p>Una arquitectura que los interesados no entienden (y no pueden analizar, mantener ni aprender) es esfuerzo perdido: <b>comunicarla es tan importante como crearla</b>. La Clase 10 lista además: analizar alternativas, planear la migración de sistemas legados, certificar que el sistema cumple la arquitectura, servir de insumo a las demás etapas, planear y presupuestar, especificar líneas de producto.</p>
+<p><b>Interesados mínimos:</b> usuarios, compradores (cliente), desarrolladores, mantenedores. <b>Intereses mínimos:</b> propósito o misión, adecuación para cumplirla, factibilidad de construirlo, riesgos de desarrollo y operación, requisitos no funcionales (mantenibilidad, evolución, despliegue).</p>
+<p>Una <b>vista</b> es una representación de un conjunto de elementos del sistema y sus relaciones; representa alguna de las muchas estructuras presentes a la vez. Bass: <i>documentar una arquitectura es documentar las vistas relevantes y luego agregar la documentación que aplica a más de una vista</i>.</p>
+</div></div>
+
+<div class="block"><h2 id="v-41">El modelo 4+1 de Kruchten</h2>
+<figure class="dg" data-h="500" id="fig-k41"><div class="dg-stage"><div class="dg-inner" data-diagram="k41"></div></div><figcaption class="dg-cap"><span>Las cuatro vistas y los escenarios que las unen. Las flechas son las correspondencias de la Clase 10.</span></figcaption></figure>
+<div data-player="k41" data-target="fig-k41"></div>
+<div class="note warn" style="margin-top:12px"><b>Nombres que verás mezclados.</b> La Clase 10 nombra las 5 vistas como: diseño (conceptual), proceso, implementación (desarrollo), despliegue (física) y casos de uso. Kruchten (1995) las llama lógica, procesos, desarrollo, física y escenarios. Son las mismas; en el examen puedes usar “vista lógica (de diseño)”, etc., para cubrir ambas.</div>
+</div>
+
+<div class="block"><h2 id="v-cada">Cada vista a fondo</h2>
+<div data-tabs>
+<div class="tabs"><button>Lógica</button><button>Procesos</button><button>Desarrollo</button><button>Física</button><button>Escenarios (+1)</button></div>
+<div class="tabpanel"><div class="card vcard log" style="display:grid;gap:10px">
+<span class="vtag log">Vista lógica (de diseño)</span>
+<dl class="kv">
+<dt>Qué muestra</dt><dd>La funcionalidad descompuesta en abstracciones: cercana a la semántica del negocio. Vocabulario del problema, espacio de solución, colaboraciones, subsistemas e interfaces que exponen.</dd>
+<dt>Centrada en</dt><dd>Funcionalidad, distribución de responsabilidades, aislamiento de intereses.</dd>
+<dt>Stakeholders</dt><dd>Usuarios finales, analistas del negocio.</dd>
+<dt>Estilo</dt><dd>Orientado a objetos (descomposición OO).</dd>
+<dt>Diagramas</dt><dd>Clase 10: diagrama de módulos y de secuencia (y puede acompañarse de diagramas de estado). Tabla UML de la clase: clases, objetos (estáticos); interacción, estados, actividades (dinámicos). En la práctica: paquetes/módulos o clases a alto nivel.</dd>
+<dt>Pregunta que responde</dt><dd>¿Qué partes hay y qué responsabilidad tiene cada una? ¿Quién depende de quién?</dd>
+<dt>En el Taller 4</dt><dd>Figura 1 (estructura general), Figura 3 (interna del módulo), Figuras 5, 7, 9. Corresponde a estructuras de módulo.</dd>
+</dl></div>
+<figure class="dg" data-h="560" id="fig-t4l" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4logica"></div></div><figcaption class="dg-cap"><span>Vista lógica de la estructura general del Taller 4 (reconstruida del texto; la figura original no se pudo extraer del PDF).</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="card vcard pro" style="display:grid;gap:10px">
+<span class="vtag pro">Vista de procesos</span>
+<dl class="kv">
+<dt>Qué muestra</dt><dd>Descomposición en procesos (grupos de tareas) e hilos (tareas planificables en un nodo); mecanismos de concurrencia y sincronización; integridad; tolerancia a fallos. Puede verse como redes de procesos.</dd>
+<dt>Centrada en</dt><dd>Rendimiento, escalabilidad, funcionamiento; requisitos no funcionales como desempeño, disponibilidad, concurrencia, integridad, tolerancia a fallos.</dd>
+<dt>Stakeholders</dt><dd>Integradores.</dd>
+<dt>Estilos</dt><dd>Tubos y filtros, cliente/servidor…</dd>
+<dt>Diagramas</dt><dd>Clase 10: diagrama de flujo o de actividades. Tabla UML: clases activas, objetos; interacción (secuencia), estados, actividades. El Taller 4 usa diagramas de secuencia por escenario + una tabla de unidades de concurrencia con su multiplicidad.</dd>
+<dt>Pregunta que responde</dt><dd>¿Qué corre a la vez, cuántas instancias, cómo se comunican (síncrono/asíncrono) y qué pasa si algo falla?</dd>
+</dl></div>
+<figure class="dg" data-h="640" id="fig-escA" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4escA"></div></div><figcaption class="dg-cap"><span>Vista de procesos del escenario A (Taller 4, Fig. 2 reconstruida). Continuas: síncronas · verdes punteadas: asíncronas · grises: retornos.</span></figcaption></figure>
+<div data-player="escA" data-target="fig-escA"></div>
+</div>
+<div class="tabpanel"><div class="card vcard des" style="display:grid;gap:10px">
+<span class="vtag des">Vista de desarrollo (implementación)</span>
+<dl class="kv">
+<dt>Qué muestra</dt><dd>La organización estática del software en el entorno de desarrollo: componentes, módulos, librerías, subsistemas, como jerarquía de niveles (4 a 6). Soporta el trabajo en equipos.</dd>
+<dt>Centrada en</dt><dd>Administración de la configuración, reúso, portabilidad, seguridad.</dd>
+<dt>Stakeholders</dt><dd>Programadores, gestores del software.</dd>
+<dt>Diagramas</dt><dd>Diagrama de componentes (también paquetes). En el ejemplo BookStore: modelo de implementación con paquetes C#, Java, EJB Entity, EJB Session, DDL, XSD.</dd>
+<dt>Pregunta que responde</dt><dd>¿Cómo se organiza el código, qué equipo hace qué, qué depende de qué al compilar?</dd>
+</dl></div>
+<figure class="dg" data-h="470" id="fig-t4d" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4dev"></div></div><figcaption class="dg-cap"><span>Propuesta de estudio para el módulo (no está en el Taller 4, que entrega solo lógica y procesos).</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="card vcard fis" style="display:grid;gap:10px">
+<span class="vtag fis">Vista física (de despliegue)</span>
+<dl class="kv">
+<dt>Qué muestra</dt><dd>Nodos que forman el sistema, topología del hardware y mapeo del software al hardware.</dd>
+<dt>Centrada en</dt><dd>Distribución, comunicación, entrega, instalación, escalabilidad, rendimiento.</dd>
+<dt>Stakeholders</dt><dd>Ingenieros de sistemas, operaciones.</dd>
+<dt>Diagramas</dt><dd>Diagrama de despliegue (nodos, artefactos, conexiones). La Clase 10 muestra el despliegue de BookStore con modelos distintos para producción, pruebas y desarrollo.</dd>
+<dt>Pregunta que responde</dt><dd>¿Dónde corre cada cosa, cuántas réplicas, en qué zonas, qué pasa si cae un nodo?</dd>
+</dl></div>
+<figure class="dg" data-h="400" id="fig-bs" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="bookstore"></div></div><figcaption class="dg-cap"><span>Despliegue del ejemplo BookStore de la Clase 10 (simplificado).</span></figcaption></figure>
+<figure class="dg" data-h="540" id="fig-t4f" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4fis"></div></div><figcaption class="dg-cap"><span>Propuesta de estudio para Gestión de Desastres. El Taller 4 dejó la vista de despliegue como trabajo pendiente (sección 10).</span></figcaption></figure>
+</div>
+<div class="tabpanel"><div class="card vcard esc" style="display:grid;gap:10px">
+<span class="vtag esc">Vista de escenarios (+1)</span>
+<dl class="kv">
+<dt>Qué muestra</dt><dd>Todas las vistas anteriores en el contexto de casos de uso: el comportamiento del sistema como lo ven usuarios y stakeholders. Se usa un <b>pequeño subconjunto</b> de escenarios arquitectónicamente significativos. Un escenario es una instancia de un caso de uso.</dd>
+<dt>Para qué</dt><dd>Es redundante con las otras pero con propósito diferente: descubrir elementos durante el diseño e <b>ilustrar y validar</b> que las 4 vistas funcionan juntas.</dd>
+<dt>Diagramas</dt><dd>Casos de uso (estático); interacción, estados, actividades (dinámico).</dd>
+</dl></div>
+<figure class="dg" data-h="520" id="fig-t4c" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4casos"></div></div><figcaption class="dg-cap"><span>Casos de uso del módulo derivados de los RF del Taller 4 (propuesta de estudio).</span></figcaption></figure>
+</div>
+</div></div>
+
+<div class="block"><h2 id="v-uml">Vistas y diagramas UML (tabla de la Clase 10)</h2>
+<div data-table="vistasuml"></div>
+<div class="flow" style="margin-top:10px"><p>Cada vista tiene aspectos <b>estáticos</b> (diagramas estructurales) y <b>dinámicos</b> (diagramas de comportamiento): se puede trabajar la vista de diseño estática y la dinámica, y así con cada una.</p></div>
+</div>
+
+<div class="block"><h2 id="v-corr">Correspondencia entre vistas</h2>
+<div class="grid3">
+<div class="card"><h4>Lógica → procesos</h4><p class="small"><b>De adentro hacia afuera:</b> definir tareas que multiplexen un solo hilo de control. <b>De afuera hacia adentro:</b> desde la arquitectura física, definir los procesos que atienden los estímulos externos (peticiones).</p></div>
+<div class="card"><h4>Lógica → desarrollo</h4><p class="small">Una clase usualmente se implementa como un módulo. Otros criterios para subsistemas: organización del equipo, tamaño del código, reúso, capas, políticas de gestión de configuración.</p></div>
+<div class="card"><h4>Procesos → física</h4><p class="small">Los procesos y grupos de procesos se mapean al hardware, tanto para pruebas como para despliegue.</p></div>
+</div>
+<div class="note" style="margin-top:10px"><b>En el Taller 4.</b> La separación lógica de comandos y consultas (DA-09) es lo que permitió después la separación <i>física</i> de caminos (DA-16): un ejemplo real de cómo una decisión en una vista habilita otra.</div>
+<figure class="dg" data-h="470" id="fig-caminos" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner" data-diagram="t4caminos"></div></div><figcaption class="dg-cap"><span>Caminos de escritura, lectura e ingesta (Taller 4, iteración 4).</span></figcaption></figure>
+</div>
+
+<div class="block"><h2 id="v-cuantas">¿Cuántas vistas? ¿Cómo elegirlas y documentarlas?</h2>
+<div class="flow">
+<p><b>Posturas:</b> algunos autores prescriben un conjunto fijo (RUP se basa en 4+1). Hoy se reconoce que el arquitecto produce las vistas útiles al sistema: <b>IEEE 1471</b> dice que una descripción arquitectónica consiste en vistas, cada una conforme a un <b>punto de vista</b> que realiza los intereses de uno o más stakeholders. Bass coincide: la cantidad es una decisión de costo/beneficio.</p>
+<p><b>No todos los sistemas requieren todas las vistas</b> (Clase 10): un solo procesador → sin despliegue; un solo proceso → sin procesos; programas muy pequeños → sin implementación. Se pueden agregar vistas: de datos, de seguridad…</p>
+<p><b>Elegir vistas (3 pasos):</b> 1) lista de candidatas con una tabla stakeholders × intereses indicando cuánto detalle necesita cada uno; 2) combinar vistas que interesan a pocos o que se pueden fusionar; 3) priorizar, primero en amplitud, dando prioridad a lo que ayuda a cumplir la misión.</p>
+</div>
+<div class="grid2" style="margin-top:10px">
+<div class="card"><h4>Plantilla para documentar una vista</h4><ol class="small" style="margin:0;padding-left:18px"><li>Presentación (el diagrama principal)</li><li>Catálogo de elementos: elementos y propiedades, relaciones, interfaces, comportamiento</li><li>Diagrama de contexto (relación de la vista con su entorno)</li><li>Guía de variabilidad (cómo variar la vista)</li><li>Antecedentes: razonamiento (rationale), análisis de resultados, suposiciones</li><li>Información adicional</li><li>Vistas relacionadas</li></ol></div>
+<div class="card"><h4>Lo que agrega Bass cap. 22</h4><p class="small">Tres categorías de vistas que corresponden a las estructuras: <b>módulo</b>, <b>C&amp;C</b> y <b>asignación</b>, más <b>vistas de calidad</b> (seguridad, desempeño…). La documentación de comportamiento puede ser por <b>trazas</b> (casos de uso, secuencia, comunicación, actividades) o <b>completa</b> (máquinas de estado). Los diagramas de secuencia no muestran bien la concurrencia: para eso, actividades. Documentar también el <b>rationale</b>.</p></div>
+</div>
+</div>
+
+<div class="block"><h2 id="v-sim">Práctica: ¿a qué vista pertenece?</h2>
+<p class="muted small">Clasifica cada afirmación. Si fallas, lee la explicación: es exactamente el tipo de error que resta puntos en un diagrama del examen.</p>
+<div id="sim41"></div>
+</div>
+
+<div class="block"><h2 id="v-check">Checklist para cada vista en el examen</h2>
+<div class="grid2">
+<div class="card vcard log"><h4>Lógica</h4><ul class="small" style="margin:0;padding-left:18px"><li>Cada caja tiene un nombre del dominio y una responsabilidad</li><li>Interfaces nombradas entre subsistemas</li><li>Dependencias dirigidas (sin ciclos)</li><li>Sin servidores, IPs ni tecnologías</li></ul></div>
+<div class="card vcard pro"><h4>Procesos</h4><ul class="small" style="margin:0;padding-left:18px"><li>Un escenario concreto recorrido</li><li>Síncrono vs. asíncrono con notación distinta</li><li>Colas/tópicos visibles</li><li>Multiplicidad (2–12 instancias), timeouts, reintentos</li></ul></div>
+<div class="card vcard des"><h4>Desarrollo</h4><ul class="small" style="margin:0;padding-left:18px"><li>Paquetes/componentes con dependencias de compilación</li><li>Capas o niveles (4–6)</li><li>Librerías compartidas y su versión</li><li>Qué equipo es dueño de qué</li></ul></div>
+<div class="card vcard fis"><h4>Física</h4><ul class="small" style="margin:0;padding-left:18px"><li>Nodos con estereotipo «node» y artefactos «deploy»</li><li>Réplicas y zonas (disponibilidad)</li><li>Balanceadores, firewall/DMZ</li><li>BD primaria y réplica, y cómo replica</li></ul></div>
+<div class="card vcard esc"><h4>Escenarios</h4><ul class="small" style="margin:0;padding-left:18px"><li>Actores humanos y sistemas externos</li><li>3–6 casos de uso significativos</li><li>«include»/«extend» solo si aportan</li><li>Un recorrido que toque las 4 vistas</li></ul></div>
+<div class="card"><h4>Errores comunes</h4><ul class="small" style="margin:0;padding-left:18px"><li>Poner la BD física en la vista lógica</li><li>Dibujar clases de código en la vista física</li><li>Vista de procesos sin concurrencia (solo cajas)</li><li>Olvidar la leyenda de la notación</li><li>Diagramas sin texto que explique decisiones</li></ul></div>
+</div></div>
+</div></section>

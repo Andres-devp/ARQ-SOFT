@@ -1,0 +1,220 @@
+
+<!-- ======================= JAKARTA ======================= -->
+<section class="view" id="v-jakarta" data-title="Jakarta EE" data-group="Módulo 2 · Implementación" data-num="11"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 1 del módulo 2 · Intro Jakarta EE</span><h1>Jakarta EE: la arquitectura hecha plataforma</h1><div class="src"><span class="chip src-prof">Clase 1 JEE (36 diapositivas)</span><span class="chip src-ext">complemento para conectar con el Módulo 1</span></div></div>
+
+<div class="block"><h2 id="j-que">¿Qué es?</h2>
+<div class="flow">
+<p>Jakarta EE es un <b>conjunto de especificaciones</b> de APIs Java para construir aplicaciones empresariales. La mayoría de sus abstracciones son interfaces y clases abstractas; hay <b>múltiples implementaciones</b> de distintos fabricantes (algunas open source), y una aplicación construida con Jakarta EE <b>no depende de una implementación particular</b>.</p>
+<p>Esencialmente es un <b>entorno de servidor para aplicaciones distribuidas</b> que provee: un modelo de programación, infraestructura de ejecución y buenas prácticas. <b>Características:</b> múltiples plataformas, arquitectura y desarrollo simplificados, escalabilidad ante variaciones de demanda, integración con sistemas existentes, tecnología estándar del mercado.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Jakarta EE es como el estándar de los enchufes eléctricos: define la forma; Payara, WildFly u Open Liberty son los fabricantes de tomacorrientes. Tu aparato (la app) funciona en cualquiera que cumpla la norma.</span></div>
+<div class="note"><b>Conexión con el Módulo 1.</b> Que la app dependa de especificaciones y no de un producto es la táctica de modificabilidad/integrabilidad <b>encapsular</b> + <b>adherir a estándares</b>. El contenedor además te “regala” tácticas: transacciones (disponibilidad), autenticar/autorizar (seguridad), mensajería asíncrona (desempeño y modificabilidad).</div>
+</div></div>
+
+<div class="block"><h2 id="j-hist">Versiones, perfiles y MicroProfile</h2>
+<div class="flow">
+<p><b>Línea de tiempo empresarial (diapositiva):</b> Servlets 1.0 (1997) · J2EE 1.2 (1999) · J2EE 1.3 (2001) · J2EE 1.4 (2003) · Java EE 5 (2006) · Java EE 6 (2009) · Java EE 7 (2013) · Java EE 8 (2016) · “Java EE 10” (sep. 2022) · “Java EE 11” (jun. 2023). Un consorcio (miembros estratégicos como Fujitsu, IBM, Oracle, Payara, Tomitribe; empresariales como Microsoft y Red Hat) trabaja la especificación.</p>
+<p><b>Jakarta EE 10</b> define tres perfiles anidados: <b>Platform</b> ⊃ <b>Web Profile</b> ⊃ <b>Core Profile</b>. Novedades citadas: CDI 4.0 (con CDI-Lite), Security 3.0 con OpenID Connect, Servlet 6.0, Faces 4.0, JSON Binding 3.0, RESTful Web Services con API de arranque para Java SE, Persistence con UUID, Concurrency 3.0 en el Web Profile. <b>Jakarta EE 11</b> agrega <b>Data 1.0</b> y actualiza Persistence 3.2, Security 4.0, Servlet 6.1, CDI 4.1, entre otras.</p>
+<p><b>Microservicios y JEE:</b> <b>MicroProfile</b> (7.1 en la diapositiva) se apoya en el Core Profile y aporta Config, Fault Tolerance, Health, JWT Authentication, OpenAPI, Telemetry y Rest Client (más especificaciones independientes: LRA, GraphQL, Reactive Messaging, Metrics, etc.).</p>
+<div class="note flag"><b>Revisa estos rótulos.</b> La diapositiva escribe “Java EE 10” y “Java EE 11”; desde 2019 la marca es <b>Jakarta</b> EE (8, 9, 10, 11). Además fecha la versión 11 en jun. 2023; según información pública (complemento externo, verifícalo con el profesor), la plataforma Jakarta EE 11 completa se publicó en 2025. Para el examen, cita lo que diga la clase y, si te preguntan, menciona la diferencia de nombre.</div>
+</div></div>
+
+<div class="block"><h2 id="j-tiers">El modelo multicapa distribuido</h2>
+<div class="flow">
+<p>Jakarta EE usa un modelo de <b>aplicación multicapa distribuida</b>. La lógica se divide en <b>componentes</b> (según su función) y <b>contenedores</b> (según el nivel). Los tiers son:</p>
+<ul><li><b>Client tier</b>: se ejecuta en la máquina cliente (navegador con HTML dinámico o cliente de aplicación Java).</li><li><b>Web tier</b>: en el servidor Jakarta EE.</li><li><b>Business tier</b>: en el servidor Jakarta EE.</li><li><b>EIS tier</b> (Enterprise Information System): en el servidor EIS (bases de datos, ERP, heredados).</li></ul>
+<div class="note warn"><b>Tier ≠ layer.</b> Un <i>tier</i> es un nivel de despliegue (físico); una <i>layer</i> es una capa lógica. Web tier y business tier pueden estar en el mismo servidor: son dos capas lógicas en un tier físico. En 4+1: las capas van en la vista lógica/desarrollo; los tiers, en la física.</div>
+</div>
+<figure class="dg" data-h="360" id="fig-jee17" style="margin-top:10px"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:jee17.jpg}}" alt="Diapositiva: Multitiered Applications y Server Communication" width="1210" height="681"></div></div><figcaption class="dg-cap"><span>Diapositiva 17: aplicaciones multicapa y comunicación con el servidor.</span></figcaption></figure>
+</div>
+
+<div class="block"><h2 id="j-comp">Tecnologías de componentes, servicios y comunicaciones</h2>
+<div class="grid2">
+<div class="card vcard log"><h4>Contenedor web (presentación)</h4><p class="small"><b>Servlets</b> (atienden HTTP), <b>JSP</b> (páginas con Java, antiguas), <b>JSF / Faces</b> (componentes de UI del lado servidor), <b>JavaBeans</b>. Contenedores web más usados según la diapositiva: Tomcat (~78 %), Jetty, Undertow.</p></div>
+<div class="card vcard log"><h4>Contenedor EJB (lógica de negocio)</h4><p class="small">Enterprise JavaBeans: <b>Session Beans</b> (lógica), <b>Entity Beans</b> (persistencia antigua; hoy la reemplaza JPA — complemento externo), <b>Message-Driven Beans</b> (consumen mensajes JMS). Servidores más usados en la diapositiva: WildFly (~52 %), Payara, GlassFish, TomEE, JBoss EAP, Open Liberty.</p></div>
+</div>
+<div class="tbl-wrap" style="margin-top:12px"><table><thead><tr><th>Tecnología de servicios</th><th>Qué hace (Clase 1)</th><th>Táctica que te da</th></tr></thead><tbody>
+<tr><td>JPA / JPQL</td><td>Persistencia de POJOs (objetos simples que no heredan de clases del framework). Parte de EJB 3.0 pero ya no requiere contenedor EJB ni servidor. Combina ideas de Hibernate, TopLink, JDO.</td><td>Encapsular / abstraer fuentes de datos</td></tr>
+<tr><td>JTA / JTS</td><td>JTA: transacciones, especialmente distribuidas, independiente del administrador. JTS: implementación de un manejador que soporte JTA.</td><td>Transacciones (prevenir fallas)</td></tr>
+<tr><td>JNDI</td><td>Operaciones estándar con servicios de directorio (LDAP, NDS, NIS). El servidor lo usa para crear/localizar recursos como EJB.</td><td>Descubrir (integrabilidad)</td></tr>
+<tr><td>JMS</td><td>Enviar y recibir mensajes asíncronos usando un MOM.</td><td>Intermediario, asincronía, colas acotadas</td></tr>
+<tr><td>JavaMail</td><td>Clases abstractas que modelan un sistema de correo; independiente de plataforma y protocolo.</td><td>Abstraer servicios comunes</td></tr>
+<tr><td>Java Connector Architecture</td><td>Arquitectura estándar para conectar la plataforma con sistemas de información heterogéneos (ERP…) con mecanismos escalables, seguros y transaccionales.</td><td>Intermediario / adaptador (integrabilidad)</td></tr>
+<tr><td>JAAS</td><td>Permisos según quién ejecuta el código; admite Kerberos o PKI.</td><td>Autenticar y autorizar actores</td></tr>
+</tbody></table></div>
+<p class="small" style="margin-top:8px"><b>Comunicaciones:</b> protocolos de Internet (HTTP, TCP/IP, SSL) y de objetos remotos (RMI, RMI-IIOP, JavaIDL). <b>Herramientas de desarrollo</b> (diapositiva): Eclipse 48 %, IntelliJ IDEA 33 %, NetBeans 10 %, STS 4 %, otros 5 %.</p>
+</div>
+
+<div class="block"><h2 id="j-arq">La arquitectura Jakarta EE, paso a paso</h2>
+<figure class="dg" data-h="470" id="fig-jee"><div class="dg-stage"><div class="dg-inner" data-diagram="jee"></div></div><figcaption class="dg-cap"><span>Reconstrucción de la diapositiva “Arquitectura JEE”: cliente, contenedores web y EJB, servicios y capa de datos.</span></figcaption></figure>
+<div data-player="jee" data-target="fig-jee"></div>
+<figure class="dg" data-h="380" id="fig-jee35" style="margin-top:12px"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:jee35.jpg}}" alt="Diapositiva original Arquitectura JEE" width="1210" height="681"></div></div><figcaption class="dg-cap"><span>Diapositiva original (35) para comparar.</span></figcaption></figure>
+</div>
+
+<div class="block"><h2 id="j-tipos">Cuatro tipos de arquitectura con Jakarta EE</h2>
+<div class="flow"><p><b>No distribuidas:</b> (1) aplicaciones web con interfaces a componentes de negocio; (2) aplicaciones web que acceden a objetos de negocio locales (misma JVM, invocación EJB local). <b>Distribuidas:</b> (3) aplicaciones con objetos de negocio remotos (RMI, mismo o distinto servidor/JVM); (4) aplicaciones web que exponen una interfaz tipo web service.</p></div>
+<div data-tabs>
+<div class="tabs"><button>1 · Interfaces a negocio</button><button>2 · Objetos locales</button><button>3 · Objetos remotos</button><button>4 · Web service</button></div>
+<div class="tabpanel"><figure class="dg" data-h="380" id="fig-jee18"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:jee18.jpg}}" alt="Aplicaciones web con interfaces a componentes del negocio" width="1210" height="681"></div></div><figcaption class="dg-cap"><span>Servlets/clases web → interfaz de negocio → implementación → DBMS y sistema heredado. Todo en el contenedor web.</span></figcaption></figure></div>
+<div class="tabpanel"><figure class="dg" data-h="380" id="fig-jee19"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:jee19.jpg}}" alt="Aplicaciones web accediendo a interfaces locales" width="1210" height="681"></div></div><figcaption class="dg-cap"><span>Business Delegate → invocación EJB local → Session EJB (+ Entity opcional). Una sola JVM.</span></figcaption></figure></div>
+<div class="tabpanel"><figure class="dg" data-h="380" id="fig-jee20"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:jee20.jpg}}" alt="Aplicaciones distribuidas con objetos remotos" width="1210" height="681"></div></div><figcaption class="dg-cap"><span>Business Delegate → RMI → Session EJB en el mismo o en otro servidor/JVM. Trade-off: distribución y escalado vs. latencia de red.</span></figcaption></figure></div>
+<div class="tabpanel"><figure class="dg" data-h="380" id="fig-jee21"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:jee21.jpg}}" alt="Aplicaciones web que exponen web service" width="1210" height="681"></div></div><figcaption class="dg-cap"><span>Clientes de web services entran por una interfaz de servicio web junto a la interfaz de negocio. Favorece interoperabilidad.</span></figcaption></figure></div>
+</div></div>
+
+<div class="block"><h2 id="j-4p1">Cómo se vería el Taller 4 con Jakarta EE</h2>
+<p class="small muted">Complemento externo: un ejercicio de mapeo para conectar módulos. No es parte del Taller 4 (que es agnóstico de tecnología) ni de la Clase 1.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Elemento del Taller 4</th><th>Posible realización Jakarta EE</th><th>Vista</th></tr></thead><tbody>
+<tr><td>API de eventos y API de consulta</td><td>Recursos Jakarta REST (RESTful Web Services) en el contenedor web</td><td><span class="vtag log">lógica</span> <span class="vtag des">desarrollo</span></td></tr>
+<tr><td>Gestor de ciclo de vida y motores</td><td>Beans CDI o Session Beans sin estado</td><td><span class="vtag log">lógica</span></td></tr>
+<tr><td>Consumidor de reportes</td><td>Message-Driven Bean suscrito a un tópico JMS</td><td><span class="vtag pro">procesos</span></td></tr>
+<tr><td>Repositorio, bitácora, outbox</td><td>Entidades JPA + transacción JTA que abarca las tres escrituras</td><td><span class="vtag log">lógica</span> <span class="vtag pro">procesos</span></td></tr>
+<tr><td>Timeout, reintento, cortacircuitos</td><td>MicroProfile Fault Tolerance</td><td><span class="vtag pro">procesos</span></td></tr>
+<tr><td>Heartbeat / monitor</td><td>MicroProfile Health + balanceador</td><td><span class="vtag fis">física</span></td></tr>
+<tr><td>Autenticación federada</td><td>Jakarta Security con OpenID Connect / JWT</td><td><span class="vtag log">lógica</span></td></tr>
+</tbody></table></div>
+</div>
+</div></section>
+
+<!-- ======================= EXAMEN ======================= -->
+<section class="view" id="v-examen" data-title="Resolver el caso del examen" data-group="Examen" data-num="12"><div class="page">
+<div class="sec-head"><span class="eyebrow">Método + práctica</span><h1>Resolver el caso del examen</h1><div class="src"><span class="chip src-ext">método de estudio construido desde Clases 4, 10, 12 y Talleres 3–4</span></div></div>
+<div class="note warn"><b>Aviso honesto.</b> No hay en el proyecto un examen anterior ni una rúbrica del profesor. El método de abajo sale de cómo se trabajó en los talleres; los casos de práctica son inventados para entrenar la misma habilidad con un sistema distinto.</div>
+
+<div class="block"><h2 id="x-met">El método en 10 pasos</h2>
+<figure class="dg" data-h="300" id="fig-met"><div class="dg-stage"><div class="dg-inner" data-diagram="metodo"></div></div><figcaption class="dg-cap"><span>Del enunciado a las 5 vistas.</span></figcaption></figure>
+<div data-player="metodo" data-target="fig-met"></div>
+</div>
+
+<div class="block"><h2 id="x-rub">¿Qué distingue una respuesta excelente?</h2>
+<div class="rubric">
+<div class="card"><span class="lvl" style="color:var(--bad)">Memorización</span><h4>“Usamos microservicios porque escalan.”</h4><p class="small">Repite propiedades del estilo sin conectarlas con el caso. No hay escenario, ni alternativa, ni costo.</p></div>
+<div class="card"><span class="lvl" style="color:var(--warn)">Correcta pero superficial</span><h4>Escenarios sin medida, vistas sin notación</h4><p class="small">Identifica los atributos correctos, dibuja cajas, pero “alta disponibilidad” sin número y la vista de procesos sin distinguir síncrono de asíncrono.</p></div>
+<div class="card"><span class="lvl" style="color:var(--v-pro)">Técnicamente sólida</span><h4>Drivers → escenarios → tácticas → vistas</h4><p class="small">Escenarios de 6 partes con medida, estilo justificado con alternativa descartada, tácticas por atributo y 4+1 coherentes entre sí.</p></div>
+<div class="card"><span class="lvl" style="color:var(--ok)">Excelente</span><h4>Trazabilidad y trade-offs explícitos</h4><p class="small">Cada decisión cita el driver que atiende (IDs), dice qué sacrifica y cómo lo mitiga, identifica riesgos residuales y recorre un escenario por las 4 vistas.</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h4>Frases que funcionan</h4><ul class="small" style="margin:0;padding-left:18px;display:grid;gap:4px">
+<li>“<b>Para atender QA-02</b> (pico de 10× en 15 min) elijo … porque …”</li>
+<li>“<b>Descarto</b> la arquitectura en capas porque obliga a escalar toda la aplicación.”</li>
+<li>“Esta decisión <b>favorece</b> la modificabilidad <b>pero sacrifica</b> latencia; lo mitigo con …”</li>
+<li>“<b>Riesgo residual:</b> … <b>Tratamiento:</b> …”</li>
+<li>“En la vista de procesos, las flechas punteadas son <b>asíncronas</b>.” (siempre incluye leyenda)</li>
+</ul></div>
+</div>
+
+<div class="block"><h2 id="x-casos">Casos de práctica</h2>
+<p class="muted small">Intenta cada caso en papel antes de abrir la solución. Cronométrate y usa el método de 10 pasos.</p>
+
+<div class="card" style="display:grid;gap:10px">
+<span class="eyebrow">Caso 1 · Salud</span><h3>Plataforma de citas de una EPS</h3>
+<p>Una EPS quiere que sus 2 millones de afiliados agenden citas por web y app. Los lunes a las 7:00 a. m. entran 15.000 usuarios en 10 minutos. Las agendas viven en los sistemas propios de 40 clínicas (tecnologías distintas, algunas se caen con frecuencia). Se deben enviar recordatorios por SMS y correo. La historia clínica es dato sensible. Cada año cambian las reglas de autorización de citas por tipo de plan.</p>
+<details class="sol"><summary>Ver solución modelo</summary><div>
+<p><b>Drivers.</b> RF primarios: buscar disponibilidad, agendar, cancelar, recordar. QA: escalabilidad (pico lunes), disponibilidad frente a clínicas caídas, interoperabilidad (40 sistemas), seguridad (datos sensibles), modificabilidad (reglas por plan). RES: no reemplazar sistemas de clínicas. PA: trabajo de varios equipos.</p>
+<p><b>Escenario clave (escalabilidad):</b> Fuente: afiliados · Estímulo: 15.000 usuarios en 10 min · Artefacto: búsqueda de disponibilidad · Entorno: lunes 7 a. m. · Respuesta: escala solo la búsqueda · Medida: p95 &lt; 2 s, 0 errores 5xx. <b>Escenario (resiliencia):</b> una clínica no responde → se muestran sus cupos cacheados marcados “por confirmar” y se agenda en cola; conciliación &lt; 15 min tras volver.</p>
+<p><b>Estilo:</b> microservicios por dominio (agenda, afiliados, autorización, notificaciones) + eventos para recordatorios y conciliación. <b>Descartado:</b> capas monolítico (escalaría todo por el pico de búsqueda; una clínica lenta agotaría hilos de toda la app). <b>Patrones/tácticas:</b> API gateway con limitación de tasa; adaptador por clínica con cortacircuitos y timeout; caché de disponibilidad con TTL; CQRS para búsqueda; motor de reglas por plan como datos (postergar la vinculación); cifrado y autorización por rol.</p>
+</div>
+<figure class="dg" data-h="420" id="fig-c1l"><div class="dg-stage"><div class="dg-inner" data-diagram="c1logica"></div></div><figcaption class="dg-cap"><span>Vista lógica del caso 1.</span></figcaption></figure>
+<figure class="dg" data-h="560" id="fig-c1s"><div class="dg-stage"><div class="dg-inner" data-diagram="c1seq"></div></div><figcaption class="dg-cap"><span>Vista de procesos: agendar con una clínica caída.</span></figcaption></figure>
+<div>
+<p><b>Desarrollo:</b> un repositorio por servicio; librería compartida de contratos de eventos; adaptadores como plug-ins registrados. <b>Física:</b> dos zonas, gateway y servicios replicados; BD de agenda con réplica; caché distribuida; cola de conciliación replicada. <b>Escenarios:</b> casos de uso Agendar, Cancelar, Recibir recordatorio, Configurar reglas de plan; recorrido “agendar con clínica caída” por las 4 vistas.</p>
+<p><b>Trade-offs:</b> cupos cacheados favorecen disponibilidad pero pueden estar desactualizados (riesgo de doble asignación → confirmar al conciliar); microservicios favorecen escalado selectivo pero aumentan costo operativo; reglas como datos favorecen cambios anuales sin despliegue pero exigen un validador.</p>
+</div></details>
+</div>
+
+<div class="card" style="display:grid;gap:10px;margin-top:12px">
+<span class="eyebrow">Caso 2 · Movilidad</span><h3>Seguimiento de buses de una ciudad</h3>
+<p>3.000 buses envían su posición GPS cada 10 segundos. Los ciudadanos consultan en la app cuánto falta para su bus (picos de 80.000 usuarios en horas punta). Un centro de control ve el mapa en tiempo real y recibe alertas si un bus se detiene más de 5 minutos. Los buses pierden conectividad en túneles. Se deben guardar los recorridos 5 años para análisis.</p>
+<details class="sol"><summary>Ver solución modelo</summary><div>
+<p><b>Drivers.</b> Desempeño (ingesta de 300 posiciones/s continuas; alerta &lt; 30 s), escalabilidad de lectura (80.000 usuarios), disponibilidad (el centro de control no puede quedar ciego), tolerancia a desconexión, almacenamiento histórico.</p>
+<p><b>Estilo:</b> flujo de datos (stream processing) para la ingesta + eventos para alertas + CQRS para consultas ciudadanas + batch para análisis histórico. <b>Descartado:</b> batch sequential para las alertas (llegarían tarde, igual que el problema IoT del Taller 3); repositorio central síncrono (cuello de botella de escritura).</p>
+<p><b>Tácticas:</b> colas acotadas y particiones por bus (orden por vehículo), timestamp para detectar secuencias fuera de orden tras un túnel, heartbeat implícito (“sin posición en 5 min” = alerta), caché de ETA por parada, réplicas de lectura, degradación: si la ingesta se atrasa, la app muestra “posición hace X s”.</p>
+<p><b>Vistas:</b> lógica (Ingesta, Detector de detenciones, Cálculo de ETA, Consulta ciudadana, Histórico, Panel de control); procesos (secuencia: bus → cola particionada → procesadores en paralelo → tópico de alertas → panel; consultas por el camino de lectura); desarrollo (repos por servicio, librería de esquemas de posición); física (brokers replicados, nodos de stream en 2 zonas, almacenamiento de objetos para histórico); escenarios (Consultar llegada, Recibir alerta, Analizar recorridos).</p>
+<p><b>Trade-offs:</b> particionar por bus preserva el orden pero limita el paralelismo por vehículo; ETA desde caché favorece la latencia a costa de frescura (segundos); stream processing da latencia baja con infraestructura costosa y manejo de estado complejo.</p>
+</div></details>
+</div>
+
+<div class="card" style="display:grid;gap:10px;margin-top:12px">
+<span class="eyebrow">Caso 3 · Universidad</span><h3>Matrícula en línea</h3>
+<p>Una universidad de 25.000 estudiantes abre matrícula por turnos: cada turno de 2.000 estudiantes entra al mismo minuto. Los cupos por grupo no pueden sobrevenderse. Las reglas (prerrequisitos, créditos máximos) cambian cada semestre. El pago se hace en un sistema financiero heredado que solo acepta archivos por lotes en la noche. Presupuesto limitado y equipo pequeño.</p>
+<details class="sol"><summary>Ver solución modelo</summary><div>
+<p><b>Drivers.</b> Consistencia de cupos (integridad), pico por turno, modificabilidad de reglas, integración batch con el financiero, simplicidad y costo (equipo pequeño).</p>
+<p><b>Estilo:</b> monolito modular en capas (o N-tier) replicado tras un balanceador, con una BD central transaccional (centrado en datos para los cupos), motor de reglas como plug-in (microkernel) y un proceso batch nocturno hacia el financiero. <b>Descartado:</b> microservicios con BD por servicio (el cupo es un recurso compartido que exige consistencia fuerte; costo y complejidad injustificados; es el razonamiento del problema 10 del Taller 3).</p>
+<p><b>Tácticas:</b> transacciones y bloqueo por grupo (prevenir sobreventa), cola de espera con límite de tasa por turno (controlar la demanda), caché de catálogo de cursos (múltiples copias de datos), reglas como datos versionados por semestre (postergar la vinculación), archivo de pagos generado por un job idempotente.</p>
+<p><b>Vistas:</b> lógica (Presentación, Inscripción, Reglas académicas [plug-ins], Catálogo, Integración financiera, Persistencia); procesos (secuencia de inscripción con transacción sobre el cupo; job nocturno); desarrollo (un repo, módulos por paquete, plug-ins de reglas); física (2–4 instancias de app, BD primaria + réplica, servidor batch); escenarios (Inscribir materia, Retirar, Configurar reglas del semestre, Generar archivo de pagos).</p>
+<p><b>Trade-offs:</b> consistencia fuerte en la BD favorece integridad pero la vuelve el límite de escalado (el turno limita la concurrencia); monolito favorece costo y simplicidad pero escala entero; batch con el financiero respeta la restricción pero el pago se confirma al día siguiente (hay que comunicarlo al estudiante).</p>
+</div></details>
+</div>
+</div>
+</div></section>
+
+<!-- ======================= PRÁCTICA ======================= -->
+<section class="view" id="v-practica" data-title="Quiz y tarjetas" data-group="Examen" data-num="13" data-no-done="1" data-no-gl="1"><div class="page">
+<div class="sec-head"><span class="eyebrow">Autoevaluación</span><h1>Quiz y tarjetas de memoria</h1></div>
+<div data-tabs>
+<div class="tabs"><button>Quiz</button><button>Tarjetas</button></div>
+<div class="tabpanel"><p class="muted small">Elige una respuesta: verás si es correcta y por qué. Las respuestas se guardan en este navegador y cuentan para el progreso de cada sección.</p><div id="quizBox"></div></div>
+<div class="tabpanel"><p class="muted small">Intenta responder antes de voltear. Marca “La sé” o “Repasar otra vez”.</p><div id="cardsBox"></div></div>
+</div>
+</div></section>
+
+<!-- ======================= GLOSARIO ======================= -->
+<section class="view" id="v-glosario" data-title="Glosario" data-group="Referencia" data-num="" data-no-done="1" data-no-gl="1"><div class="page">
+<div class="sec-head"><span class="eyebrow">Todos los términos con tooltip</span><h1>Glosario</h1></div>
+<div id="glossList"></div>
+</div></section>
+
+<!-- ======================= PROGRESO ======================= -->
+<section class="view" id="v-progreso" data-title="Mi progreso" data-group="Referencia" data-num="" data-no-done="1" data-no-gl="1"><div class="page">
+<div class="sec-head"><span class="eyebrow">Guardado solo en este navegador</span><h1>Mi progreso</h1></div>
+<div id="progBox"></div>
+</div></section>
+
+<!-- ======================= FUENTES ======================= -->
+<section class="view" id="v-fuentes" data-title="Fuentes y vacíos" data-group="Referencia" data-num="" data-no-done="1"><div class="page">
+<div class="sec-head"><span class="eyebrow">Qué se leyó, qué falta y qué no cuadra</span><h1>Fuentes y vacíos</h1></div>
+<div class="block"><h2>Documentos leídos</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Documento</th><th>Lectura</th><th>Usado en</th></tr></thead><tbody>
+<tr><td>Programa del curso 2026-30</td><td>Completo (texto)</td><td>Alcance, evaluación</td></tr>
+<tr><td>Clase 2 · Intro Bass</td><td>Texto; figuras de ejemplo son imágenes</td><td>¿Qué es la arquitectura?</td></tr>
+<tr><td>Clase 3 · Atributos de calidad</td><td>Texto; modelos McCall, Boehm, ISO son imágenes</td><td>Calidad</td></tr>
+<tr><td>Clase 4 · Disponibilidad y desplegabilidad</td><td>Texto; escenarios generales y tácticas de desplegabilidad son imágenes</td><td>Escenarios, atributos</td></tr>
+<tr><td>Clase 5a · Eficiencia energética</td><td>Texto</td><td>Atributos</td></tr>
+<tr><td>Clase 5b · Integrabilidad</td><td>Texto; árboles de tácticas son imágenes</td><td>Atributos</td></tr>
+<tr><td>Clase 9 · Estilos arquitectónicos</td><td>Texto; varias categorías solo tienen imagen</td><td>Estilos</td></tr>
+<tr><td>Clase 10 · Documentación</td><td>Texto completo (incluye ejemplo BookStore)</td><td>Vistas 4+1</td></tr>
+<tr><td>Clase 12 · ADD</td><td>Texto; tablas del FCAPS son imágenes</td><td>ADD</td></tr>
+<tr><td>Clase 1 · Jakarta EE</td><td>Las 36 diapositivas como imagen</td><td>Jakarta EE</td></tr>
+<tr><td>Bass, Clements, Kazman 4.ª ed.</td><td>Caps. 1–4, 8–13, 19–22 (texto)</td><td>Casi todas</td></tr>
+<tr><td>Richards 2022</td><td>Completo (texto; figuras de estrellas son imágenes)</td><td>Estilos</td></tr>
+<tr><td>Taller 3 (docx + matriz xlsx)</td><td>Completo; 4 hojas de la matriz</td><td>Estilos</td></tr>
+<tr><td>Taller 4 (PDF del grupo)</td><td>Texto completo; figuras 1–11 no extraíbles</td><td>ADD, Taller 4, vistas</td></tr>
+<tr><td>Tus 3 capturas</td><td>Enunciado del Taller 4, lista de Clases 6 y 7, Clase 14</td><td>Alcance, Taller 4</td></tr>
+</tbody></table></div>
+<div class="grid2" style="margin-top:12px">
+<figure class="dg" data-h="200" id="fig-cap67"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:clases67.png}}" alt="Clases 6 y 7 en el aula virtual" width="508" height="232"></div></div><figcaption class="dg-cap"><span>Clases 6 y 7 (sin diapositivas en el proyecto).</span></figcaption></figure>
+<figure class="dg" data-h="200" id="fig-cap14"><div class="dg-stage"><div class="dg-inner"><img src="{{IMG:clase14.png}}" alt="Clase 14 ATAM en el aula virtual" width="1692" height="175"></div></div><figcaption class="dg-cap"><span>Clase 14 ATAM y su bibliografía.</span></figcaption></figure>
+</div>
+</div>
+<div class="block"><h2>Lo que falta</h2>
+<ul class="flow" style="padding-left:20px">
+<li>Diapositivas de las Clases 6, 7, 14 (y no se ven las 8, 11 y 13 en el proyecto): esos temas se enseñan con Bass.</li>
+<li>No hay un examen anterior ni rúbrica: el método del examen es una propuesta de estudio.</li>
+<li>El programa no indica qué temas entran en el Parcial 1.</li>
+<li>El libro de ADD de Cervantes y Kazman y el de ATAM de Clements, Kazman y Klein no están en el proyecto.</li>
+</ul></div>
+<div class="block"><h2>Contradicciones o diferencias señaladas</h2>
+<ul class="flow" style="padding-left:20px">
+<li><b>Estilo vs. patrón:</b> la Clase 9 y el Taller 3 llaman “patrón” a microservicios; Richards lo llama “estilo”. (<a href="#estilos">Estilos</a>)</li>
+<li><b>Desempeño de EDA:</b> Richards 5 estrellas vs. Bass “pub/sub perjudica la latencia”. (<a href="#estilos">Estilos</a>)</li>
+<li><b>Tabla estilos–atributos</b> de la Clase 9: desempeño asociado y en conflicto a la vez en llamada y retorno; blackboard repite listas. (<a href="#estilos">Estilos</a>)</li>
+<li><b>Eventos:</b> la Clase 9 dice “invocaciones explícitas” pero describe invocación implícita. (<a href="#estilos">Estilos</a>)</li>
+<li><b>Nombres de las vistas:</b> diseño/implementación/despliegue/casos de uso (Clase 10) vs. lógica/desarrollo/física/escenarios (Kruchten). (<a href="#vistas">Vistas</a>)</li>
+<li><b>Diagramas por vista:</b> la Clase 10 sugiere flujo/actividades para procesos; el Taller 4 usa secuencia. Ambos son válidos. (<a href="#vistas">Vistas</a>)</li>
+<li><b>Edición de Bass:</b> la Clase 3 cita la 3.ª ed. (2013); el curso usa la 4.ª (2021): cambia la lista de atributos. (<a href="#calidad">Calidad</a>)</li>
+<li><b>Interoperabilidad:</b> el programa la nombra; Bass 4.ª ed. la trata dentro de integrabilidad. (<a href="#atributos">Atributos</a>)</li>
+<li><b>Jakarta EE:</b> la diapositiva dice “Java EE 10/11” y fecha EE 11 en 2023. (<a href="#jakarta">Jakarta</a>)</li>
+<li><b>Taller 4:</b> referencias internas a secciones 9 y 11 que en realidad son 8 y 10. (<a href="#taller4">Taller 4</a>)</li>
+</ul></div>
+</div></section>
+
+</main>
+</div>

@@ -1,0 +1,223 @@
+<header class="topbar">
+  <button class="iconbtn menubtn" id="menuBtn" type="button" aria-label="Abrir menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="#inicio"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="11" height="11" rx="2" fill="var(--v-log)"/><rect x="18" y="3" width="11" height="11" rx="2" fill="var(--v-des)"/><rect x="3" y="18" width="11" height="11" rx="2" fill="var(--v-pro)"/><rect x="18" y="18" width="11" height="11" rx="2" fill="var(--v-fis)"/><circle cx="16" cy="16" r="5" fill="var(--v-esc)" stroke="var(--surface)" stroke-width="2"/></svg><span>Parcial <span class="long">Arquitectura</span> 4+1</span></a>
+  <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar conceptos, IDs (QA-01, DA-10)…  /" aria-label="Buscar en toda la plataforma" autocomplete="off"><div class="sres" id="sres" hidden></div></div>
+  <div title="Progreso global" style="display:flex;align-items:center;gap:6px;min-width:70px"><div class="bar" style="width:48px"><i id="topProg" style="width:0"></i></div><span id="topProgTxt" class="mono small">0%</span></div>
+  <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar tema claro/oscuro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar"><nav class="nav" id="nav" aria-label="Secciones"></nav></aside>
+<main class="main" id="main">
+
+<!-- ======================= INICIO ======================= -->
+<section class="view" id="v-inicio" data-title="Inicio" data-group="Empieza aquí" data-num="00"><div class="page">
+<div class="hero">
+  <span class="eyebrow">Arquitectura de Software · Javeriana 2026-30 · Parcial 1</span>
+  <h1>Del enunciado a las 5 vistas</h1>
+  <p class="lead">El examen te dará un caso y te pedirá diseñar su arquitectura, con énfasis en diagramas 4+1. Esta plataforma te lleva desde los conceptos base hasta resolver ese caso: identificar drivers, escribir escenarios de calidad medibles, elegir estilos y tácticas, dibujar cada vista y justificar los trade-offs.</p>
+</div>
+
+<div class="block">
+<h2>El parcial en 60 segundos</h2>
+<div class="flow">
+<p>Una arquitectura es el <b>conjunto de estructuras que te permiten razonar sobre un sistema</b>. No se diseña por la funcionalidad (cualquier cosa sirve para “hacer lo que pide”), sino por los <b>atributos de calidad</b>: disponibilidad, desempeño, modificabilidad, seguridad… Como “debe ser escalable” no se puede verificar, cada atributo se escribe como un <b>escenario de 6 partes</b> con una medida numérica.</p>
+<p>Para cumplir esos escenarios el arquitecto elige <b>estilos</b> (la forma general: capas, microservicios, eventos…), <b>patrones</b> y <b>tácticas</b> (decisiones pequeñas como un heartbeat o un cortacircuitos). Cada elección favorece algo y sacrifica otra cosa: eso es un <b>trade-off</b>. El método del curso para ordenar estas decisiones es <b>ADD</b> (7 pasos por iteración); para comunicarlas, el <b>modelo 4+1</b> (vistas lógica, de procesos, de desarrollo y física, más escenarios que las validan); y para evaluarlas, <b>ATAM</b>. El módulo 2 empieza a mostrar cómo se implementa todo esto con <b>Jakarta EE</b>.</p>
+</div>
+</div>
+
+<div class="block">
+<h2>Cifras que debes saber de memoria</h2>
+<div class="figs">
+  <div class="fig"><span class="n">6</span><span class="t">partes de un escenario de calidad: fuente, estímulo, artefacto, entorno, respuesta, medida</span></div>
+  <div class="fig"><span class="n">4+1</span><span class="t">vistas de Kruchten: lógica, procesos, desarrollo, física + escenarios</span></div>
+  <div class="fig"><span class="n">7</span><span class="t">pasos de ADD por iteración</span></div>
+  <div class="fig"><span class="n">3</span><span class="t">categorías de estructuras: módulo, componente-conector, asignación</span></div>
+  <div class="fig"><span class="n">4 · 9</span><span class="t">fases y pasos de ATAM</span></div>
+  <div class="fig"><span class="n">A=</span><span class="t">MTBF / (MTBF + MTTR)</span></div>
+  <div class="fig"><span class="n">99,999</span><span class="t">% = “5 nueves” ≈ 5,3 min caídos al año (alta disponibilidad)</span></div>
+  <div class="fig"><span class="n">4</span><span class="t">grupos de tácticas de seguridad: detectar, resistir, reaccionar, recuperar</span></div>
+  <div class="fig"><span class="n">3</span><span class="t">grupos de tácticas de disponibilidad: detectar, recuperar, prevenir</span></div>
+  <div class="fig"><span class="n">4</span><span class="t">tiers de Jakarta EE: cliente, web, negocio, EIS</span></div>
+  <div class="fig"><span class="n">20 %</span><span class="t">peso del Parcial 1 en la nota (teórico)</span></div>
+  <div class="fig"><span class="n">30 %</span><span class="t">de votos por stakeholder en el paso 7 de ATAM</span></div>
+</div>
+</div>
+
+<div class="block">
+<h2>Ruta de estudio sugerida</h2>
+<p class="muted small">El orden no es el de los PDF: va de lo que necesitas para entender a lo que necesitas para aplicar. Cada tramo depende del anterior.</p>
+<div class="route">
+  <a href="#fundamentos"><span class="i">01</span><span>Fundamentos desde cero<span class="d">Módulo, componente, interfaz, síncrono/asíncrono, UML básico</span></span><span class="w">35 min</span></a>
+  <a href="#que-es"><span class="i">02</span><span>¿Qué es la arquitectura?<span class="d">Clase 2 · estructuras y por qué importa</span></span><span class="w">25 min</span></a>
+  <a href="#calidad"><span class="i">03</span><span>Calidad y modelos de calidad<span class="d">Clase 3 · McCall → ISO 25010</span></span><span class="w">15 min</span></a>
+  <a href="#escenarios"><span class="i">04</span><span>Escenarios, tácticas y patrones<span class="d">Clase 4 + Bass cap. 3 · la herramienta central</span></span><span class="w">35 min</span></a>
+  <a href="#atributos"><span class="i">05</span><span>Los 10 atributos de calidad<span class="d">Clases 4–7 · tácticas por atributo</span></span><span class="w">90 min</span></a>
+  <a href="#estilos"><span class="i">06</span><span>Estilos y patrones<span class="d">Clase 9 + Richards + Taller 3</span></span><span class="w">60 min</span></a>
+  <a href="#vistas"><span class="i">07</span><span>Documentación y 4+1 ★<span class="d">Clase 10 · el énfasis del examen</span></span><span class="w">75 min</span></a>
+  <a href="#add"><span class="i">08</span><span>Diseño con ADD<span class="d">Clase 12</span></span><span class="w">40 min</span></a>
+  <a href="#taller4"><span class="i">09</span><span>Taller 4 resuelto<span class="d">Gestión de Desastres: 5 iteraciones, IDs clicables</span></span><span class="w">60 min</span></a>
+  <a href="#atam"><span class="i">10</span><span>Evaluación con ATAM<span class="d">Clase 14 (Bass cap. 21)</span></span><span class="w">30 min</span></a>
+  <a href="#jakarta"><span class="i">11</span><span>Jakarta EE<span class="d">Clase 1 del módulo 2</span></span><span class="w">35 min</span></a>
+  <a href="#examen"><span class="i">12</span><span>Resolver el caso del examen<span class="d">Método + 3 casos de práctica</span></span><span class="w">90 min</span></a>
+  <a href="#practica"><span class="i">13</span><span>Quiz y tarjetas<span class="d">60+ preguntas, 70+ tarjetas</span></span><span class="w">libre</span></a>
+</div>
+</div>
+
+<div class="block">
+<h2>Cómo usar la plataforma</h2>
+<div class="grid2">
+  <div class="card"><h4>Palabras subrayadas</h4><p class="small">Pasa el mouse (o toca en el celular) sobre una <span class="gl" data-g="tactica" tabindex="0">palabra punteada</span> para ver su definición y un ejemplo. Aparece la primera vez que el término sale en cada sección.</p></div>
+  <div class="card"><h4>Identificadores</h4><p class="small">Los códigos del Taller 4 como QA-01, DA-10 o R1 son botones: muestran su definición y en qué secciones se mencionan.</p></div>
+  <div class="card"><h4>Diagramas</h4><p class="small">Todos caben en pantalla. Usa + / −, <kbd>Ctrl</kbd> + rueda, doble clic (con <kbd>Shift</kbd> aleja), arrastra para moverte y ⛶ para pantalla completa.</p></div>
+  <div class="card"><h4>Etiquetas de fuente</h4><p class="small"><span class="chip src-prof">Clase N</span> diapositivas del profesor · <span class="chip src-libro">Bass / Richards</span> libros · <span class="chip src-taller">Taller</span> trabajo del curso · <span class="chip src-ext">complemento</span> conocimiento externo para aclarar.</p></div>
+</div>
+<div class="note warn" style="margin-top:12px"><b>Alcance asumido.</b> El programa del curso no dice qué temas entran en cada parcial. Aquí se cubre el Módulo 1 completo (introducción, atributos, estilos, ADD, documentación, ATAM) más la Clase 1 de Jakarta EE, como pediste. Las clases 6, 7 y 14 no tienen diapositivas en el proyecto; esos temas vienen de Bass (caps. 8–13 y 21).</div>
+</div>
+</div></section>
+
+<!-- ======================= FUNDAMENTOS ======================= -->
+<section class="view" id="v-fundamentos" data-title="Fundamentos desde cero" data-group="Empieza aquí" data-num="01"><div class="page">
+<div class="sec-head"><span class="eyebrow">Prerrequisitos que el profesor da por sabidos</span><h1>Fundamentos desde cero</h1><div class="src"><span class="chip src-ext">complemento</span><span class="chip src-prof">Clases 2, 9, 10</span><span class="chip src-libro">Bass cap. 1, 22</span></div></div>
+
+<div class="block"><h2 id="f-mod">Módulo vs. componente: código vs. ejecución</h2>
+<div class="flow">
+<p>La confusión más frecuente en arquitectura es mezclar dos mundos. Un <b>módulo</b> es un trozo de <i>código</i> que existe cuando el sistema está apagado: un paquete, una clase, una capa. Un <b>componente</b> es algo que <i>corre</i>: un proceso, un servicio con 5 instancias, un servidor. El mismo módulo puede ejecutarse como varios componentes.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Una partitura (módulo) vs. la orquesta tocándola (componente). La partitura existe aunque nadie toque; la orquesta puede tocarla tres veces a la vez en tres salas.</span></div>
+<p>Los componentes se comunican por <b>conectores</b>: una llamada que espera respuesta, una tubería, una cola de mensajes, un tópico de publicación-suscripción.</p>
+<div class="note"><b>Dónde aparece en tu proyecto.</b> “Gestor de zonas” es un módulo (código). “GD-Consulta, de 3 a 30 instancias” es un componente. El “bus de eventos” es un conector (Taller 4).</div>
+</div></div>
+
+<div class="block"><h2 id="f-int">Interfaz, acoplamiento y cohesión</h2>
+<div class="flow">
+<p>Una <b>interfaz</b> es el contrato público de un elemento: qué ofrece y cómo se pide. Lo que hay detrás es implementación privada. La arquitectura solo se ocupa del lado público (Clase 2).</p>
+<p><b>Acoplamiento</b>: cuánto depende un módulo de otro (se busca bajo). <b>Cohesión</b>: qué tan relacionadas están las cosas dentro de un módulo (se busca alta). Un cambio que toca un solo módulo es barato; uno que se propaga por cinco es caro.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>El enchufe de la pared es una interfaz: no te importa si la energía viene de una hidroeléctrica o de paneles solares. Si cada electrodoméstico tuviera que conectarse directo a la central, estaría fuertemente acoplado a ella.</span></div>
+<div class="note"><b>Dónde aparece en tu proyecto.</b> DA-03: un adaptador por sistema externo evita que el formato del hospital se disperse por todos los módulos (bajo acoplamiento).</div>
+</div></div>
+
+<div class="block"><h2 id="f-sync">Síncrono vs. asíncrono, procesos e hilos</h2>
+<div class="flow">
+<p>En una llamada <b>síncrona</b> quien llama espera la respuesta. En una <b>asíncrona</b> deja el mensaje (en una cola o un tópico) y sigue trabajando; la respuesta, si la hay, llega después.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Llamar por teléfono (síncrono: esperas en la línea) vs. mandar un mensaje de WhatsApp (asíncrono: sigues con tu vida y lees la respuesta después).</span></div>
+<p>Un <b>proceso</b> es un programa en ejecución con su memoria; un <b>hilo</b> es una línea de ejecución dentro de un proceso. Cuando varias tareas avanzan a la vez hay <b>concurrencia</b>, y con ella problemas de orden y sincronización. Todo esto es la materia prima de la vista de procesos.</p>
+<div class="note"><b>Dónde aparece en tu proyecto.</b> DA-05: “una operación es síncrona si tiene objetivo de latencia o si el usuario necesita su resultado para continuar; asíncrona en los demás casos”.</div>
+</div></div>
+
+<div class="block"><h2 id="f-web">Cliente-servidor, HTTP, API y base de datos</h2>
+<div class="flow">
+<p>En <b>cliente-servidor</b> un programa pide (cliente) y otro atiende (servidor) por una red. En la web la petición viaja en <b>HTTP</b>: un método (GET para leer, POST para crear) y una respuesta con código (200 = bien, 500 = error del servidor). Una <b>API</b> es la interfaz que un programa ofrece a otros; <b>REST</b> es un estilo de API sobre HTTP basado en recursos como <code>/desastres/42</code>.</p>
+<p>Una <b>base de datos</b> guarda información de forma persistente. Una <b>transacción</b> agrupa cambios para que se apliquen todos o ninguno. Una <b>réplica</b> es una copia en otro lugar; un <b>balanceador de carga</b> reparte peticiones entre varias instancias; una <b>caché</b> guarda copias rápidas de lo que se consulta mucho.</p>
+</div></div>
+
+<div class="block"><h2 id="f-lat">Latencia, throughput y percentiles</h2>
+<div class="flow">
+<p><b>Latencia</b>: cuánto tarda <i>una</i> petición. <b>Throughput</b>: cuántas peticiones se procesan por segundo. Mejorar una no siempre mejora la otra: agrupar trabajo sube el throughput pero puede aumentar la latencia de cada petición.</p>
+<p>El <b>percentil 95</b> (p95) es el valor por debajo del cual está el 95 % de las mediciones. Se usa porque el promedio esconde a los usuarios que esperan mucho.</p>
+<div class="note"><b>Dónde aparece en tu proyecto.</b> QA-03: “consultas p95 menor a 2 s; registro p95 menor a 3 s; alerta crítica publicada en menos de 5 s”.</div>
+</div></div>
+
+<div class="block"><h2 id="f-uml">UML mínimo para el examen</h2>
+<div class="flow">
+<p>UML es un lenguaje gráfico con diagramas <b>estructurales</b> (qué hay: clases, paquetes, componentes, despliegue) y <b>dinámicos</b> (cómo se comporta: casos de uso, secuencia, actividades, estados). Cada vista 4+1 tiene sus diagramas preferidos. Este es el vocabulario visual mínimo:</p>
+</div>
+<figure class="dg" data-h="470" id="fig-umlnot"><div class="dg-stage"><div class="dg-inner" data-diagram="umlnot"></div></div><figcaption class="dg-cap"><span>Símbolos UML agrupados por la vista donde más se usan. Línea continua con flecha llena = llamada síncrona; línea punteada verde = mensaje asíncrono; punteada gris = dependencia.</span></figcaption></figure>
+<div class="grid2">
+ <div class="card"><h4>Diagrama de secuencia</h4><p class="small">Líneas de vida verticales; el tiempo corre hacia abajo; los mensajes son flechas horizontales. Ideal para mostrar un escenario en la vista de procesos. No muestra bien el paralelismo.</p></div>
+ <div class="card"><h4>Diagrama de actividades</h4><p class="small">Flujograma con acciones, decisiones (rombo) y barras de bifurcación/unión para lo que ocurre en paralelo. La Clase 10 lo asigna a la vista de procesos.</p></div>
+ <div class="card"><h4>Diagrama de componentes</h4><p class="small">Cajas con el ícono de componente, interfaces que ofrecen y dependencias. Vista de desarrollo (implementación).</p></div>
+ <div class="card"><h4>Diagrama de despliegue</h4><p class="small">Nodos en 3D (servidores, VMs, zonas), artefactos desplegados en ellos y enlaces de red. Vista física.</p></div>
+</div>
+</div>
+
+<div class="block"><h2>Comprobación rápida</h2>
+<details class="sol"><summary>¿“El servicio de notificaciones corre en 2 a 10 instancias” describe un módulo o un componente?</summary><div><p>Un <b>componente</b>: habla de unidades en ejecución y su multiplicidad. Por eso va en la vista de procesos (y en la física, si dices en qué nodos corren).</p></div></details>
+<details class="sol"><summary>Un rescatista envía un reporte desde el campo y la app le dice “recibido” de inmediato, aunque el procesamiento tarde. ¿Síncrono o asíncrono?</summary><div><p>La <b>recepción</b> es síncrona (le confirman), pero el <b>procesamiento</b> es asíncrono. Es exactamente DA-19: “el emisor recibe confirmación de recepción y no de procesamiento”.</p></div></details>
+</div>
+</div></section>
+
+<!-- ======================= QUÉ ES AS ======================= -->
+<section class="view" id="v-que-es" data-title="¿Qué es la arquitectura?" data-group="Módulo 1 · Arquitectura" data-num="02"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 2 · Intro Bass</span><h1>¿Qué es la arquitectura de software?</h1><div class="src"><span class="chip src-prof">Clase 2</span><span class="chip src-libro">Bass caps. 1–2</span></div></div>
+
+<div class="block"><h2 id="q-prob">El problema que resuelve</h2>
+<div class="flow">
+<p>Nadie puede tener en la cabeza todos los detalles de un sistema, ni siquiera de uno modesto. Aun así hay que tomar decisiones tempranas que determinan si el sistema será rápido, disponible o fácil de cambiar. La arquitectura es la <b>abstracción</b> que permite razonar sobre esas propiedades sin mirar cada línea de código.</p>
+<p><b>Principio básico (Clase 2):</b> cada sistema se construye para satisfacer objetivos de negocio, y la arquitectura es el <b>puente</b> entre esos objetivos (abstractos) y el sistema final (concreto).</p>
+</div></div>
+
+<div class="block"><h2 id="q-def">Definición formal</h2>
+<div class="flow">
+<div class="note ok"><b>Bass (4.ª ed.):</b> “La arquitectura de software de un sistema es el conjunto de estructuras necesarias para razonar sobre el sistema. Estas estructuras comprenden elementos de software, relaciones entre ellos y propiedades de ambos.”</div>
+<p>Consecuencias que la Clase 2 destaca:</p>
+<ul>
+<li>Una arquitectura consta de estructuras; las estructuras, de elementos y relaciones.</li>
+<li>Es ante todo una abstracción: selecciona ciertos detalles y suprime otros.</li>
+<li>Se ocupa del <b>lado público</b> de las interfaces; lo privado (implementación interna) no es arquitectónico.</li>
+<li>El comportamiento de cada elemento es parte de la arquitectura en la medida en que ayuda a razonar (por ejemplo, sobre el rendimiento en ejecución).</li>
+</ul>
+<p>La Clase 2 también presenta la fórmula de [Tek2005]: <b>AS = Componentes + Relaciones (forma) + Justificación (rationale)</b>. Sin el “por qué”, un diagrama no es una arquitectura completa.</p>
+</div></div>
+
+<div class="block"><h2 id="q-est">Tres categorías de estructuras</h2>
+<div class="flow"><p>Una estructura es <b>arquitectónica</b> si apoya el razonamiento sobre un atributo que le importa a algún stakeholder: la funcionalidad, la capacidad de seguir funcionando ante fallas, la facilidad de hacer cambios, la capacidad de respuesta.</p></div>
+<figure class="dg" data-h="380" id="fig-estr"><div class="dg-stage"><div class="dg-inner" data-diagram="estructuras"></div></div><figcaption class="dg-cap"><span>Las tres categorías de la Clase 2 y a qué vista 4+1 se parecen.</span></figcaption></figure>
+<div class="grid3">
+ <div class="card vcard log"><h4>Módulo</h4><p class="small">Particionan el sistema en unidades de implementación con responsabilidades; son la base de la asignación de trabajo. Ejemplos: clases, paquetes, capas. Tipos: <b>descomposición</b> (“es-submódulo-de”, recursiva), <b>usos</b> (A usa B si la correctitud de A requiere una versión correcta de B), <b>capas</b> (cada capa es una “máquina virtual” con interfaz administrada; en capas estrictas solo se usa la capa de abajo), <b>clases</b> y <b>modelo de datos</b>.</p></div>
+ <div class="card vcard pro"><h4>Componente-conector (C&amp;C)</h4><p class="small">Cómo interactúan los elementos en ejecución. Componentes: servicios, peers, clientes, servidores, filtros. Conectores: llamada-retorno, sincronización de procesos, tuberías. Ejemplo de la clase: repositorio compartido, servidores de cuentas y cajeros que se comunican por publicador-suscriptor.</p></div>
+ <div class="card vcard fis"><h4>Asignación</h4><p class="small">Mapean las estructuras de software a lo que no es software: hardware, organización, entornos de desarrollo, prueba y ejecución.</p></div>
+</div>
+<div class="analogy"><span class="lbl">Analogía de la clase</span><span>El cuerpo humano tiene vistas muy distintas (esqueleto, sistema nervioso, circulatorio) que se representan diferente pero están relacionadas: juntas describen su arquitectura.</span></div>
+</div>
+
+<div class="block"><h2 id="q-imp">¿Por qué es importante?</h2>
+<div class="flow"><p>La Clase 2 (Bass cap. 2) lista razones. Las más útiles para argumentar en un examen:</p>
+<ol>
+<li><b>Habilita o inhibe los atributos de calidad.</b> Si el sistema es monolítico, no podrás escalar solo la parte saturada.</li>
+<li>Permite razonar y gestionar el cambio.</li>
+<li>Permite predecir las cualidades del sistema tempranamente.</li>
+<li>Mejora la comunicación entre stakeholders.</li>
+<li>Contiene las decisiones más tempranas y difíciles de cambiar.</li>
+<li>Define restricciones sobre la implementación.</li>
+<li>Influye en la estructura de la organización (y viceversa).</li>
+<li>Permite prototipos evolutivos y desarrollo incremental.</li>
+<li>Mejora las estimaciones de costo y tiempo.</li>
+</ol>
+<p class="small muted">Además: modelo transferible y reutilizable, incorporación de componentes desarrollados independientemente, restringe el vocabulario de alternativas y sirve para entrenar a personas nuevas (13 razones en total).</p>
+</div></div>
+
+<div class="block"><h2>Cómo aparece en el examen</h2>
+<div class="flow">
+<p>Rara vez te pedirán la definición literal; más bien te pedirán <b>usarla</b>: “¿qué estructuras mostrarías para convencer al cliente de que el sistema aguanta el pico?”. Respuesta sólida: una estructura C&amp;C (procesos y réplicas) y una de asignación (nodos y zonas), porque son las que permiten razonar sobre desempeño y disponibilidad.</p>
+</div>
+<details class="sol"><summary>Pregunta: ¿el nombre de la tabla SQL donde se guardan los desastres es parte de la arquitectura?</summary><div><p>Normalmente no: es un detalle privado del módulo de persistencia. Sí lo sería el <b>modelo de datos</b> si varios módulos lo comparten, porque entonces afecta al acoplamiento y a la modificabilidad (por eso los microservicios exigen que cada servicio sea dueño de sus tablas).</p></div></details>
+</div>
+</div></section>
+
+<!-- ======================= CALIDAD ======================= -->
+<section class="view" id="v-calidad" data-title="Calidad y modelos" data-group="Módulo 1 · Arquitectura" data-num="03"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 3 · Software con calidad</span><h1>Calidad de software y modelos de calidad</h1><div class="src"><span class="chip src-prof">Clase 3</span><span class="chip src-ext">complemento para diapositivas que eran imágenes</span></div></div>
+
+<div class="block"><h2 id="c-def">Tres definiciones de calidad</h2>
+<div class="grid3">
+ <div class="card"><div class="eyebrow">Pressman 2019</div><p class="small">Concordancia con los requisitos funcionales y de rendimiento establecidos, con los estándares documentados y con las características implícitas de todo software profesional.</p></div>
+ <div class="card"><div class="eyebrow">ISO/IEC 9126</div><p class="small">La totalidad de rasgos y atributos de un producto que le permiten satisfacer necesidades explícitas o implícitas.</p></div>
+ <div class="card"><div class="eyebrow">IEEE (Barbacci et al. 1995)</div><p class="small">El grado en el que el software posee una combinación deseada de factores.</p></div>
+</div>
+<div class="flow" style="margin-top:12px">
+<p><b>Aseguramiento de la calidad</b> (QA, <i>quality assurance</i>): actividades sistemáticas para lograrla: evaluaciones por etapa, auditorías y revisiones, estándares, métricas, métodos y herramientas, control de software.</p>
+<p><b>Calidad arquitectónica</b> (Barbacci): relacionar los atributos de calidad con la arquitectura, tener una base objetiva para decidir acuerdos de diseño y poder predecir los atributos sin prejuicios. Objetivo: evaluar cuantitativamente y llegar a acuerdos (trade-offs) entre atributos para lograr un mejor sistema <b>global</b>.</p>
+</div></div>
+
+<div class="block"><h2 id="c-mod">Modelos de calidad</h2>
+<div class="flow">
+<p>Un <b>modelo de calidad</b> descompone la calidad en <b>factores → subfactores → criterios</b>. Se mide cada criterio con métricas, con ellos se evalúa cada subfactor y luego cada factor.</p>
+</div>
+<div data-table="modelos"></div>
+<div class="note flag" style="margin-top:12px"><b>Marcado.</b> Las diapositivas de McCall, Boehm, ISO 9126 e ISO 25010 son imágenes sin texto extraíble; las filas marcadas “complemento externo” describen esos modelos con conocimiento general, no con lo que muestra la diapositiva. Además, la bibliografía de la Clase 3 cita Bass <b>3.ª edición (2013)</b>, mientras el programa y el proyecto usan la <b>4.ª (2021)</b>; en la 4.ª, interoperabilidad pasa a estar dentro de integrabilidad y aparecen desplegabilidad, eficiencia energética y safety como capítulos.</div>
+</div>
+
+<div class="block"><h2>Cómo se conecta con lo que sigue</h2>
+<div class="flow"><p>Los modelos dan una <b>lista de nombres</b> de atributos. Pero Bass advierte que un nombre (“mantenibilidad”) no es comprobable. Por eso la siguiente sección enseña a convertir cada atributo en un <b>escenario</b> con medida. En el examen, nombrar el modelo sirve de contexto; lo que suma puntos es el escenario.</p></div>
+<details class="sol"><summary>¿Por qué Losavio et al. dejan fuera la usabilidad en su adaptación para arquitectura?</summary><div><p>Porque su criterio es conservar los atributos que se relacionan <b>directamente</b> con la arquitectura (funcionalidad, confiabilidad, eficiencia, mantenibilidad, portabilidad). Ojo: Bass sí dedica un capítulo a usabilidad y muestra tácticas arquitectónicas (undo, cancel, MVC), así que las fuentes no coinciden del todo.</p></div></details>
+</div>
+</div></section>

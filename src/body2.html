@@ -1,0 +1,213 @@
+
+<!-- ======================= ESCENARIOS ======================= -->
+<section class="view" id="v-escenarios" data-title="Escenarios, tácticas y patrones" data-group="Módulo 1 · Arquitectura" data-num="04"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clase 4 + Bass cap. 3 · la herramienta central del curso</span><h1>Escenarios de calidad, tácticas y patrones</h1><div class="src"><span class="chip src-prof">Clase 4</span><span class="chip src-libro">Bass cap. 3</span><span class="chip src-taller">Taller 4</span></div></div>
+
+<div class="block"><h2 id="e-prob">El problema: “debe ser escalable” no significa nada</h2>
+<div class="flow">
+<p>Bass identifica tres problemas con cómo se habla de calidad:</p>
+<ol>
+<li><b>Las definiciones no son comprobables.</b> Todo sistema es modificable para ciertos cambios y no para otros.</li>
+<li><b>Se discute a qué atributo pertenece algo</b> (¿un ataque de denegación de servicio es disponibilidad, desempeño, seguridad o usabilidad?) y eso no ayuda a diseñar.</li>
+<li><b>Cada comunidad tiene su vocabulario</b>: eventos (desempeño), ataques (seguridad), fallas (disponibilidad), entradas del usuario (usabilidad).</li>
+</ol>
+<p>La solución a los dos primeros es el <b>escenario de atributo de calidad</b>; al tercero, una forma común de describir todos los atributos.</p>
+<div class="note ok"><b>Definición (Clase 4 y Bass):</b> un atributo de calidad es una propiedad medible o comprobable de un sistema que indica qué tan bien satisface las necesidades de los stakeholders más allá de su función básica. Los atributos nunca se logran de forma aislada: mejorar uno afecta a otros.</div>
+</div></div>
+
+<div class="block"><h2 id="e-6">Las 6 partes, paso a paso</h2>
+<figure class="dg" data-h="320" id="fig-esc6"><div class="dg-stage"><div class="dg-inner" data-diagram="escenario6"></div></div><figcaption class="dg-cap"><span>Estructura de un escenario (Bass fig. 3.1) llenada con QA-01 del Taller 4.</span></figcaption></figure>
+<div data-player="escenario6" data-target="fig-esc6"></div>
+<div class="flow" style="margin-top:12px">
+<p><b>Escenario general vs. concreto.</b> El <i>general</i> es independiente del sistema y lista valores posibles de cada parte (p. ej., para disponibilidad: fuente interna o externa; estímulo omisión, caída, tiempo incorrecto, respuesta incorrecta; respuesta prevenir, detectar, recuperar). El <i>concreto</i> es el de tu sistema, con números. Es más fácil para un stakeholder ajustar uno general que inventar uno desde cero.</p>
+<p><b>Atributos de ejecución vs. de desarrollo.</b> Disponibilidad, desempeño, usabilidad describen el sistema <i>corriendo</i>. Modificabilidad, testabilidad, desplegabilidad describen el <i>proceso de desarrollo</i>; su estímulo es, por ejemplo, una solicitud de cambio, y su entorno, “en diseño” o “en desarrollo”.</p>
+</div></div>
+
+<div class="block"><h2 id="e-sim">Simulador: escribe tu escenario</h2>
+<p class="muted small">Llena las 6 partes o carga un ejemplo. La revisión automática te avisa si falta algo o si usas palabras vagas.</p>
+<div class="card" id="simEsc"></div>
+</div>
+
+<div class="block"><h2 id="e-tac">Tácticas y patrones</h2>
+<figure class="dg" data-h="200" id="fig-tac"><div class="dg-stage"><div class="dg-inner" data-diagram="tacticas"></div></div><figcaption class="dg-cap"><span>Bass fig. 3.3: las tácticas buscan controlar la respuesta a un estímulo.</span></figcaption></figure>
+<div class="grid2">
+ <div class="card"><h4>Táctica</h4><p class="small">Decisión de diseño que influye en la respuesta de <b>un</b> atributo de calidad. Ejemplo: heartbeat (disponibilidad), caché (desempeño), autenticar actores (seguridad). Se refinan: “planificar recursos” se concreta como round-robin o prioridad; “usar un intermediario” como capa, broker, proxy.</p></div>
+ <div class="card"><h4>Patrón arquitectónico</h4><p class="small">Describe un problema de diseño recurrente en un contexto y una solución probada: roles de los elementos, responsabilidades, relaciones y colaboración. <b>Empaqueta varias tácticas</b>, por eso casi siempre implica trade-offs entre atributos. Ejemplo: cortacircuitos, publicación-suscripción, capas.</p></div>
+</div>
+<div class="flow" style="margin-top:12px">
+<p><b>¿Por qué diseñar con tácticas? (3 razones, Clase 4):</b> 1) a veces no hay un patrón que resuelva todo y hay que adaptarlo; 2) si no existe patrón, las tácticas permiten construir un fragmento de diseño desde primeros principios; 3) hacen el diseño y el análisis más sistemáticos.</p>
+<p><b>“Super-tácticas”</b> (Bass): encapsular, restringir dependencias, usar un intermediario y abstraer servicios comunes aparecen en casi todos los patrones. El monitoreo aparece en disponibilidad, desempeño, energía y safety. Una táctica no vive en un solo atributo.</p>
+<p><b>Cuestionario basado en tácticas</b> (Bass 3.6): por cada táctica del atributo se responde ¿soportada? (S/N), ¿qué decisión y dónde?, ¿riesgo (H/M/L)?, ¿razonamiento? Toma 30–90 minutos por atributo. El Taller 4 lo usó en el paso 7 de ADD y así descubrió que a la iteración 3 le faltaban tácticas de prevención.</p>
+</div>
+<div class="note"><b>Distinción clave para el examen.</b> “Usamos microservicios” es un estilo. “Usamos cortacircuitos entre el adaptador y el hospital” es un patrón. “Timeout de 800 ms” es una táctica. Nombrar los tres niveles demuestra dominio.</div>
+</div>
+
+<div class="block"><h2>Comprobación</h2>
+<details class="sol"><summary>Clasifica: “Cuando un organismo con sistema propio pide integrarse, el equipo construye un adaptador en ≤ 10 días-persona sin cambiar los servicios de dominio.” ¿Cuál es el entorno?</summary><div><p><b>Desarrollo</b> (así está en QA-05). La fuente es el organismo; el estímulo, la integración de un sistema con otra tecnología; el artefacto, la capa de integración; la respuesta, el adaptador que traduce al modelo canónico; la medida, ≤ 10 días-persona y cero cambios en el dominio.</p></div></details>
+<details class="sol"><summary>Reescribe como escenario: “la app debe ser rápida”.</summary><div><p>Ejemplo sólido: <i>Fuente</i>: 500 usuarios. <i>Estímulo</i>: inician 2.000 consultas en 30 s. <i>Artefacto</i>: servicio de consulta. <i>Entorno</i>: operación normal. <i>Respuesta</i>: procesa todas las consultas. <i>Medida</i>: latencia promedio ≤ 2 s (es el ejemplo de Bass, fig. 9.1).</p></div></details>
+</div>
+</div></section>
+
+<!-- ======================= ATRIBUTOS ======================= -->
+<section class="view" id="v-atributos" data-title="Los 10 atributos de calidad" data-group="Módulo 1 · Arquitectura" data-num="05"><div class="page">
+<div class="sec-head"><span class="eyebrow">Clases 4, 5a, 5b, 6, 7 · Bass caps. 4–13</span><h1>Los 10 atributos de calidad y sus tácticas</h1><div class="src"><span class="chip src-prof">Clase 4 · 5a · 5b</span><span class="chip src-libro">Bass caps. 4–13 (Clases 6 y 7)</span></div></div>
+<div class="flow"><p>Para cada atributo: qué es, cómo se ve su escenario, qué tácticas lo controlan, qué patrones las empaquetan y con qué choca. Los árboles de tácticas salen de las figuras de Bass (4.ª ed.). Las Clases 6 (modificabilidad, performance, safety) y 7 (security, testability, usability) no tienen diapositivas en el proyecto, por eso esas pestañas se basan en Bass.</p></div>
+
+<div data-tabs style="margin-top:16px">
+<div class="tabs" role="tablist"><button>Disponibilidad</button><button>Desplegabilidad</button><button>Energía</button><button>Integrabilidad</button><button>Modificabilidad</button><button>Desempeño</button><button>Safety</button><button>Seguridad</button><button>Testabilidad</button><button>Usabilidad</button><button>Todas las tácticas</button></div>
+
+<!-- DISPONIBILIDAD -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-disp">Disponibilidad <span class="chip src-prof">Clase 4</span></h2>
+<p><b>Qué es:</b> propiedad del software de estar listo para realizar su tarea cuando se necesita. Se mide como la probabilidad de dar el servicio dentro de los límites requeridos en un intervalo. En estado estable: <b>A = MTBF / (MTBF + MTTR)</b>. “Alta disponibilidad” suele significar 99,999 % (“5 nueves”) o más.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Un hospital de guardia: no importa cuánto falle un equipo (MTBF), importa cuánto tarda en estar de nuevo operativo (MTTR). Bajar el MTTR es a veces más barato que subir el MTBF.</span></div>
+<p><b>Vocabulario de fallas (Clase 4):</b> <i>error</i> (equivocación humana) → <i>fault</i> (paso incorrecto que provoca mal comportamiento) → se evidencia como <i>bug</i> → cuando se ejecuta produce un <i>failure</i> (el sistema no cumple su función) → el <i>defect</i> se detecta cuando ocurre el failure. Las faults se pueden prevenir, tolerar, eliminar o pronosticar.</p>
+<p><b>Escenario general:</b> fuente interna/externa (personas, hardware, software, infraestructura, entorno físico); estímulo: omisión, caída, tiempo incorrecto, respuesta incorrecta; entorno: normal, arranque, apagado, reparación, degradado, sobrecarga; respuesta: evitar que la falla se vuelva fallo, detectar, recuperar; medida: % de disponibilidad, tiempo para detectar, tiempo en modo degradado.</p>
+</div>
+<div data-tactree="Disponibilidad" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px">
+<h3>Mecanismos que la Clase 4 detalla</h3>
+<ul>
+<li><b>Monitor</b>: valida código HTTP 200, contenido de la respuesta, tiempo entre petición y respuesta, recursos externos, caducidad de certificados SSL, resolución DNS.</li>
+<li><b>Ping/echo</b>: PingSender envía un ping cada <code>timeInterval</code> y espera el eco hasta <code>maxWaitingTime</code>; si no llega, excepción detectada por el monitor de fallas.</li>
+<li><b>Heartbeat</b>: HeartbeatSender envía latidos con <code>pitApat()</code>; el receptor actualiza <code>lastUpdatedTime</code> y cada <code>checkingInterval</code> compara contra <code>expireTime</code> con <code>checkAlive()</code>.</li>
+<li><b>Timestamp</b>: detecta secuencias incorrectas de eventos en sistemas distribuidos con paso de mensajes.</li>
+</ul>
+<h3>Patrones de disponibilidad</h3>
+<div class="tbl-wrap"><table><thead><tr><th>Patrón</th><th>Idea</th><th>Trade-off</th></tr></thead><tbody>
+<tr><td>Redundancia activa (hot spare)</td><td>Todas las réplicas procesan en paralelo</td><td>Recuperación casi inmediata · costo alto</td></tr>
+<tr><td>Redundancia pasiva (warm spare)</td><td>Solo la principal procesa; secundarias reciben actualizaciones de estado</td><td>Balance costo/tiempo · desfase de estado</td></tr>
+<tr><td>Spare (cold spare)</td><td>Réplica apagada hasta que se necesita</td><td>Barata · recuperación lenta</td></tr>
+<tr><td>Triple modular redundancy</td><td>3 réplicas y un votador</td><td>Enmascara fallas · triple costo</td></tr>
+<tr><td>Circuit breaker</td><td>Corta las llamadas a un servicio que falla</td><td>Evita cascadas · hay que calibrar umbrales</td></tr>
+<tr><td>Process pairs</td><td>Proceso primario y de respaldo con checkpoints</td><td>Recuperación rápida · sincronización</td></tr>
+<tr><td>Forward error recovery</td><td>Pasar a un estado “bueno” hacia adelante en vez de volver atrás</td><td>No pierde trabajo · lógica compleja</td></tr>
+</tbody></table></div>
+<div class="note"><b>En tu proyecto.</b> QA-01 y QA-06 · DA-11 (redundancia activa sin estado), DA-12 (timeout + reintento + cortacircuitos), DA-13 (degradación), DA-14 (resincronización), DA-15 (réplica sincrónica por el RPO de 1 min).</div>
+</div>
+<h3 style="margin-top:22px">Calculadora de disponibilidad</h3>
+<div class="card" id="simDisp" style="margin-top:8px"></div>
+<h3 style="margin-top:22px">Simulador: cortacircuitos y heartbeat</h3>
+<figure class="dg" data-h="260" id="fig-cb"><div class="dg-stage"><div class="dg-inner" data-diagram="cb"></div></div><figcaption class="dg-cap"><span>Estados del cortacircuitos (valores de QA-06 / DA-12).</span></figcaption></figure>
+<div id="simCB" style="margin-top:10px"></div>
+</div>
+
+<!-- DESPLEGABILIDAD -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-dep">Desplegabilidad <span class="chip src-prof">Clase 4</span></h2>
+<p><b>Qué es:</b> tiempo y esfuerzo para asignar el software a un entorno de ejecución. Responde dos preguntas: <b>¿cómo llega un ejecutable a su plataforma host?</b> y <b>¿cómo se invoca</b>, por el usuario final y por otros subsistemas?</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Cambiar las llantas de un carro en movimiento: los despliegues graduales, los “feature toggles” y el rollback son las herramientas para hacerlo sin detenerlo.</span></div>
+<p><b>Escenario típico:</b> fuente: desarrollador; estímulo: nueva versión de un servicio; artefacto: el servicio; entorno: producción con tráfico; respuesta: se despliega a una fracción de usuarios y luego a todos, con opción de revertir; medida: tiempo de despliegue, % de usuarios afectados por un fallo, tiempo de rollback.</p>
+</div>
+<div data-tactree="Desplegabilidad" style="margin-top:12px"></div>
+<div class="note" style="margin-top:12px"><b>En tu proyecto.</b> QA-08 pide “despliegue independiente”; DA-01 lo habilita al hacer cada módulo una unidad de despliegue. Patrones de Bass: microservicios, despliegue azul/verde, rolling upgrade (el diagrama de Netflix Asgard en la Clase 4).</div>
+</div>
+
+<!-- ENERGÍA -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-ene">Eficiencia energética <span class="chip src-prof">Clase 5a</span></h2>
+<p><b>Qué es:</b> el consumo de energía de los dispositivos se volvió un problema a considerar; la eficiencia energética entra a la lista de atributos que <b>compiten</b> entre sí. Trade-offs explícitos: energía vs. rendimiento, disponibilidad, modificabilidad o tiempo de comercialización.</p>
+<p><b>Medición básica (Clase 5a):</b> potencia nominal × tiempo. Un servidor de 750 W por 24 h = 18.000 Wh = 18 kWh. Los servidores traen interfaces como iDRAC; los sistemas DCIM agregan el consumo de muchos equipos.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Apagar las luces de los cuartos vacíos (desactivar recursos) y juntar a todos en una sola sala (consolidación de máquinas virtuales).</span></div>
+</div>
+<div data-tactree="Eficiencia energética" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px"><p><b>Ejemplos de la clase:</b> fusión de sensores (mejores resultados con el mínimo de sensores, complejidad y costo energético), terminar tareas anormales para liberar un clúster (Uber con Ray en Kubernetes), monitor de energía con red de sensores Zigbee. Descubrimiento con “directorio de servicios verdes” en la nube; en un smartphone, la información puede venir de la tienda de aplicaciones.</p></div>
+</div>
+
+<!-- INTEGRABILIDAD -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-int">Integrabilidad <span class="chip src-prof">Clase 5b</span></h2>
+<p><b>Qué es:</b> capacidad de un sistema de ser integrado con éxito con otras unidades de software, gestionando costos y riesgos de integraciones futuras, anticipadas y no anticipadas. Es desafiante porque planifica un futuro con información incompleta: controlas tu sistema (S) pero poco o nada los componentes externos (C<sub>i</sub>).</p>
+<p><b>Dificultad = f(tamaño, distancia)</b> entre las interfaces de C<sub>i</sub> y S.</p>
+<div class="grid2">
+<div class="card"><h4>Tamaño: dependencias</h4><p class="small">Número de dependencias potenciales. Pueden ser bibliotecas, frameworks, módulos, APIs. No solo sintácticas: <b>temporales</b> (compiten por un recurso finito, comparten un dispositivo, dependencia de tiempo) y <b>semánticas</b> (comparten protocolo, formato, unidad de medida, metadatos).</p></div>
+<div class="card"><h4>Distancia: desalineaciones</h4><p class="small"><b>Sintáctica</b> (entero vs. flotante) · <b>semántica de datos</b> (metros vs. pies) · <b>semántica de comportamiento</b> (modos: inicio, apagado, recuperación; quién inicia) · <b>temporal</b> (tasas y latencias distintas) · <b>de recursos</b> (acceso exclusivo o compartido, memoria, canal).</p></div>
+</div>
+<p><b>Objetivo de las tácticas:</b> reducir costos y riesgos de agregar componentes, reintegrar los modificados e integrar conjuntos para requisitos evolutivos, de dos formas: <b>reduciendo dependencias</b> y <b>reduciendo la distancia</b>. <b>Encapsular</b> es la base de todas.</p>
+</div>
+<div data-tactree="Integrabilidad" style="margin-top:12px"></div>
+<div class="note" style="margin-top:12px"><b>En tu proyecto.</b> QA-05 · DA-03 (intermediario/adaptador), DA-22 (abstraer servicios comunes con modelo canónico, adherir a estándares), DA-23 (descubrir: registro dinámico), “configurar comportamiento” por adaptador. <b>Nota:</b> el programa del curso dice “interoperabilidad”; Bass 4.ª ed. la trata dentro de integrabilidad. El Taller 4 usa “interoperabilidad” para el escenario y tácticas de integrabilidad para resolverlo.</div>
+</div>
+
+<!-- MODIFICABILIDAD -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-mod">Modificabilidad <span class="chip src-libro">Bass cap. 8 · Clase 6</span></h2>
+<p><b>Qué es:</b> el cambio es inevitable; modificabilidad trata del costo y riesgo de hacer cambios. Bass pide responder: ¿qué puede cambiar?, ¿qué tan probable es?, ¿cuándo se hace y quién lo hace?, ¿cuánto cuesta?</p>
+<p><b>Base conceptual:</b> acoplamiento (probabilidad de que un cambio en un módulo se propague a otro) y cohesión (qué tan relacionadas están las responsabilidades de un módulo).</p>
+<p><b>Escenario de ejemplo (Bass fig. 8.1):</b> el desarrollador quiere cambiar la interfaz de usuario; en tiempo de diseño; se hace el cambio; menos de 3 horas para hacer y probar, sin efectos secundarios.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Un mueble armado con tornillos (bajo acoplamiento, se cambia una pieza) vs. uno pegado (alto acoplamiento, cambiar una pieza rompe otras).</span></div>
+</div>
+<div data-tactree="Modificabilidad" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px"><p><b>Postergar la vinculación</b> incluye: reemplazo de componentes, parametrización en compilación, aspectos, vinculación en configuración, archivos de recursos, descubrimiento, interpretar parámetros, repositorios compartidos y polimorfismo. <b>Patrones</b> (Bass 8.4): cliente-servidor, plug-in (microkernel), capas, publicación-suscripción.</p>
+<p><b>Trade-off típico:</b> cada intermediario o indirección cuesta desempeño; postergar la vinculación pierde verificación temprana (en DA-21, el compilador ya no protege contra transiciones mal definidas).</p></div>
+<div class="note"><b>En tu proyecto.</b> QA-04, QA-08 · DA-02, DA-07, DA-21 (postergar la vinculación), encapsular y restringir dependencias en la iteración 5.</div>
+</div>
+
+<!-- DESEMPEÑO -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-perf">Desempeño (performance) <span class="chip src-libro">Bass cap. 9 · Clase 6</span></h2>
+<p><b>Qué es:</b> capacidad de cumplir requisitos de tiempo. Llegan eventos (peticiones, mensajes, interrupciones) y el sistema debe responder dentro de un presupuesto de tiempo o recursos.</p>
+<p><b>Dos contribuyentes al tiempo de respuesta:</b> tiempo de <b>procesamiento</b> (trabajando) y tiempo <b>bloqueado</b> (contención por recursos, disponibilidad de recursos, dependencia de otro cálculo).</p>
+<p><b>Medidas:</b> latencia, throughput, jitter (variación de la latencia), número de peticiones no atendidas, uso de recursos. <b>Ejemplo (Bass fig. 9.1):</b> 500 usuarios inician 2.000 peticiones en 30 s en operación normal; se procesan todas con latencia promedio de 2 s.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Un restaurante: o reduces los pedidos (controlar demanda: menú corto, reservas) o pones más cocineros y hornos (gestionar recursos).</span></div>
+</div>
+<div data-tactree="Desempeño" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px"><p><b>Patrones (Bass 9.4):</b> service mesh, balanceador de carga, throttling, map-reduce. <b>Trade-off:</b> casi todos los demás atributos cuestan desempeño (Bass cap. 3: la portabilidad aísla dependencias con fronteras que agregan sobrecosto).</p></div>
+<div class="note"><b>En tu proyecto.</b> QA-02, QA-03 · DA-09 (múltiples copias de datos), DA-16 (concurrencia por caminos), DA-17 (aumentar recursos), DA-18 (caché), DA-19 (colas acotadas), DA-20 (priorizar eventos y limitar tasa). La escalabilidad no tiene capítulo propio en Bass 4.ª ed.; se logra con tácticas de desempeño como aumentar recursos y múltiples copias.</div>
+</div>
+
+<!-- SAFETY -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-saf">Safety <span class="chip src-libro">Bass cap. 10 · Clase 6</span></h2>
+<p><b>Qué es:</b> capacidad del software de evitar entrar en estados que causen o lleven a daño, lesión o muerte, o de recuperarse y limitar el daño. No confundir con <i>security</i>. Hay mucho solapamiento con disponibilidad porque las fallas de disponibilidad suelen volverse problemas de safety.</p>
+<p><b>Ejemplo (Bass fig. 10.1):</b> un sensor del monitor de un paciente no reporta un valor vital tras 100 ms; se registra la falla, se enciende una luz de alerta y se activa un sensor de respaldo de menor fidelidad; el sistema monitorea con el respaldo en no más de 300 ms.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>El freno de mano y el airbag: no evitan que algo falle, evitan que la falla haga daño.</span></div>
+</div>
+<div data-tactree="Safety" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px"><p><b>Patrones (Bass 10.4):</b> sensores redundantes, monitor-actuador, seguridad separada (separated safety), niveles de aseguramiento de diseño. <b>En tu proyecto:</b> DA-13 menciona el riesgo de decidir con datos viejos (“enviar recursos a un hospital que ya no tiene capacidad”): es un argumento de safety resuelto con marca de antigüedad.</p></div>
+</div>
+
+<!-- SEGURIDAD -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-sec">Seguridad (security) <span class="chip src-libro">Bass cap. 11 · Clase 7</span></h2>
+<p><b>Qué es:</b> capacidad de proteger datos e información de acceso no autorizado mientras se da acceso a quienes sí están autorizados. Propiedades <b>CIA</b>: confidencialidad, integridad, disponibilidad.</p>
+<p><b>Ejemplo (Bass fig. 11.1):</b> un empleado descontento en una ubicación remota intenta modificar la tabla de tarifas de pago en operación normal; se detecta el acceso no autorizado, se mantiene una pista de auditoría y los datos correctos se restauran en un día.</p>
+<div class="analogy"><span class="lbl">Analogía de Bass</span><span>Seguridad física de una instalación: cercas y controles (resistir), carnés para detectar intrusos (detectar), cerraduras automáticas (reaccionar), respaldo fuera del sitio (recuperar).</span></div>
+</div>
+<div data-tactree="Seguridad" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px"><p><b>Patrones (Bass 11.4):</b> intercepting validator, sistema de prevención de intrusos. En Jakarta EE, JAAS y Jakarta Security implementan autenticar/autorizar.</p></div>
+<div class="note"><b>En tu proyecto.</b> QA-07, RES-10, PA-05 · DA-24 (autorizar por rol, organización y finalidad), DA-25 (auditar), cifrar datos personales, gateway como punto limitado de acceso (limitar exposición).</div>
+</div>
+
+<!-- TESTABILIDAD -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-test">Testabilidad <span class="chip src-libro">Bass cap. 12 · Clase 7</span></h2>
+<p><b>Qué es:</b> facilidad con la que el software puede hacerse demostrar sus fallas mediante pruebas. Para probar hay que poder <b>controlar</b> las entradas y el estado interno de cada componente y <b>observar</b> sus salidas.</p>
+<div class="analogy"><span class="lbl">Analogía</span><span>Un carro con puerto de diagnóstico (interfaz especializada): el mecánico lee el estado sin desarmar el motor.</span></div>
+</div>
+<div data-tactree="Testabilidad" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px"><p><b>Patrones (Bass 12.4):</b> inyección de dependencias (CDI en Jakarta EE), strategy, intercepting filter. <b>Principio de la Clase 12:</b> para testabilidad, externaliza el estado. <b>En tu proyecto:</b> capas internas (DA-06) permiten probar el dominio sin BD; el validador del catálogo (DA-21) es una aserción ejecutable antes de publicar.</p></div>
+</div>
+
+<!-- USABILIDAD -->
+<div class="tabpanel"><div class="flow">
+<h2 id="a-usa">Usabilidad <span class="chip src-libro">Bass cap. 13 · Clase 7</span></h2>
+<p><b>Qué es:</b> qué tan fácil le resulta al usuario lograr una tarea y qué soporte le da el sistema: aprender, usar eficientemente, minimizar errores, adaptarse, dar confianza.</p>
+<p><b>Ejemplo (Bass fig. 13.1):</b> un usuario descarga una aplicación nueva y la usa productivamente tras solo 2 minutos de experimentación.</p>
+</div>
+<div data-tactree="Usabilidad" style="margin-top:12px"></div>
+<div class="flow" style="margin-top:12px"><p><b>Patrones (Bass 13.4):</b> MVC, Observer, Memento (para undo). <b>En tu proyecto:</b> mostrar la antigüedad del dato (DA-09, DA-13), distinguir “recibido” de “procesado” en la app móvil (DA-19): son decisiones de “mantener modelo del sistema”.</p></div>
+</div>
+
+<!-- TODAS -->
+<div class="tabpanel">
+<p class="muted small">Catálogo completo de tácticas de Bass (4.ª ed.) que aparecen en el curso. Filtra por atributo o busca una palabra.</p>
+<div data-table="tacticas"></div>
+</div>
+</div>
+
+<div class="block"><h2>Cómo aparece en el examen</h2>
+<div class="flow"><p>Te darán un requisito vago (“disponible en todo momento”) y esperan que: 1) lo escribas como escenario con medida; 2) elijas tácticas del grupo correcto (detectar + recuperar + prevenir); 3) digas qué cuestan. Una respuesta excelente además <b>ubica</b> la táctica en una vista: el heartbeat y las réplicas se dibujan en la vista de procesos y la física.</p></div>
+<details class="sol"><summary>“El sistema no puede perder un reporte confirmado aunque el servicio se reinicie.” ¿Qué tácticas usarías?</summary><div><p>Prevenir: <b>transacciones</b> (cambio + outbox atómicos, DA-10). Recuperar: <b>cola persistente</b> y <b>resincronización de estado</b> (DA-14). Detectar: <b>heartbeat</b> del servicio. Trade-off: entrega al menos una vez → consumidores idempotentes; latencia de escritura por la réplica sincrónica (DA-15).</p></div></details>
+</div>
+</div></section>
